@@ -30,6 +30,11 @@ const menuGroups = [
         route: "#",
         children: [{ label: "Akun Pembeli", route: "/admin/verify/guests" }],
       },
+      {
+        icon: <DashboardIcon />,
+        label: "Pembelian",
+        route: "/admin/transactions",
+      },
     ],
   },
 ];

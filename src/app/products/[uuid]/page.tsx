@@ -19,16 +19,17 @@ export default function page({ params }: { params: { uuid: string } }) {
   const [open, setOpen] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [values, setValues] = useState<any>({});
+  const [quantity, setQuantity] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const quantityProps = {
-    // handleChange: handleChange,
+    handleChange: (e: any) => setQuantity(e.target.value),
     label: "Jumlah Produk Yang Ingin Dibeli",
     name: "quantity",
     type: "number",
     placeholder: `Maks. ${values.stock}`,
-    value: values.quantity,
+    value: quantity,
   };
 
   const handleLoad = async () => {
@@ -55,14 +56,17 @@ export default function page({ params }: { params: { uuid: string } }) {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const token = localStorage.getItem("token") || "";
-    const price = parseInt(values.price);
-    const stock = parseInt(values.stock);
+    if (!token) {
+      toast.error("Silahkan login terlebih dahulu untuk melanjutkan");
+      router.push("/auth/login");
+      return;
+    }
     try {
+      const intQuantity = parseInt(quantity);
       setIsLoading(true);
-      const response = await post_data(token, "products/buy", "PATCH", {
-        ...values,
-        price,
-        stock,
+      const response = await post_data(token, "/products/buy", "PATCH", {
+        quantity: intQuantity,
+        product_uuid: params.uuid,
       });
       toast.success(response.message);
       router.push(config.back_push);
@@ -70,6 +74,7 @@ export default function page({ params }: { params: { uuid: string } }) {
       toast.error(error.message);
     } finally {
       setIsLoading(false);
+      setOpen(false);
     }
   };
 
@@ -126,7 +131,7 @@ export default function page({ params }: { params: { uuid: string } }) {
       </div>
       {open && (
         <BasicModal props={{ toggleModal: () => setOpen(!open) }}>
-          <form onSubmit={} method="POST">
+          <form onSubmit={handleSubmit} method="POST">
             <div className="text-title-md font-semibold mb-6">Beli Produk</div>
             <Input props={quantityProps} />
             <button

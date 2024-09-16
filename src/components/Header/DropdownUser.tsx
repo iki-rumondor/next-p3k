@@ -4,6 +4,7 @@ import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
 import get_data from "actions/get_data";
 import toast from "react-hot-toast";
+import ListIcon from "../Icons/ListIcon";
 
 interface User {
   name: string;
@@ -17,8 +18,6 @@ const DropdownUser = () => {
     const token = localStorage.getItem("token") || "";
     try {
       const resp = await get_data(token, `/users/detail`);
-      console.log(resp);
-
       resp.data && setValues(resp.data);
     } catch (error: any) {
       toast.error(error.message);
@@ -154,6 +153,13 @@ const DropdownUser = () => {
               </Link>
             </li>
           </ul> */}
+          <Link
+            className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+            href={"/products"}
+          >
+            <ListIcon />
+            <span>Produk UMKM</span>
+          </Link>
           <a
             href={"/logout"}
             className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
