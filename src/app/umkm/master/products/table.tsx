@@ -1,12 +1,13 @@
 import EyeIcon from "@/components/Icons/EyeIcon";
 import { Product } from "@/types/product";
-import moment from "moment";
 import Link from "next/link";
 import React from "react";
 
 interface TableProps {
   data: Product[];
 }
+
+const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 const MainTable: React.FC<TableProps> = ({ data }) => {
   return (
@@ -30,6 +31,9 @@ const MainTable: React.FC<TableProps> = ({ data }) => {
                 <th className=" px-4 py-4 font-medium text-black dark:text-white">
                   Stok
                 </th>
+                <th className=" px-4 py-4 font-medium text-black dark:text-white">
+                  Gambar
+                </th>
                 <th className="px-4 py-4 font-medium text-black dark:text-white">
                   Aksi
                 </th>
@@ -46,6 +50,11 @@ const MainTable: React.FC<TableProps> = ({ data }) => {
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">{item.stock}</p>
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                    <a target="_blank" href={`${baseAPIUrl}/files/products/${item.image_name}`} className="text-sm text-white bg-primary px-2 py-1">
+                      Lihat
+                    </a>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <div className="flex items-center space-x-3.5">
