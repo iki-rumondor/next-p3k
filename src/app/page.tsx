@@ -20,14 +20,14 @@ export default function Home() {
               Media informasi untuk masyarakat bone bolango dalam mengetahui
               arsip lengkap dan jual beli produk umkm{" "}
             </div>
-            <div>
+            {/* <div>
               <Link
                 className="hover:bg-blue-700 bg-black px-5 py-2 inline-flex text-md mt-4 font-medium"
                 href={"/test"}
               >
                 Login Pengguna
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
