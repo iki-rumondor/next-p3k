@@ -13,27 +13,17 @@ const menuGroups = [
       {
         icon: <DashboardIcon />,
         label: "Dashboard",
-        route: "/admin/dashboard",
+        route: "/guests/dashboard",
       },
       {
-        icon: <ListIcon />,
-        label: "Master",
-        route: "#",
-        children: [
-          { label: "Kategori", route: "/admin/master/categories" },
-          { label: "Umkm", route: "/admin/master/umkm" },
-        ],
-      },
-      {
-        icon: <ClipboardIcon />,
-        label: "Verifikasi",
-        route: "#",
-        children: [{ label: "Akun Pembeli", route: "/admin/verify/guests" }],
+        icon: <DashboardIcon />,
+        label: "Pembelian Produk",
+        route: "/guests/transactions",
       },
     ],
   },
 ];
-export default function AdminLayout({
+export default function GuestLayout({
   children,
 }: {
   children: React.ReactNode;

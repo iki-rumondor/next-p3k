@@ -33,6 +33,10 @@ export default function page() {
       redirect("/umkm/dashboard");
     }
 
+    if (decodeToken.role == "GUEST") {
+      redirect("/guests/dashboard");
+    }
+
     localStorage.clear();
     redirect("/auth/login");
   }, []);
