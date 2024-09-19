@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import DashboardIcon from "@/components/Icons/DashboardIcon";
-import ListIcon from "@/components/Icons/ListIcon";
-import ClipboardIcon from "@/components/Icons/ClipboardIcon";
 
 const menuGroups = [
   {

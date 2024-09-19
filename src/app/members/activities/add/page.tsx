@@ -1,20 +1,19 @@
 "use client";
 import Input from "@/components/Forms/Input";
 import LayoutForm from "@/components/Forms/Layout";
+import Textarea from "@/components/Forms/Textarea";
 import Upload from "@/components/Forms/Upload";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
 import DeleteIcon from "@/components/Icons/DeleteIcon";
 import post_data from "actions/post_data";
-import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 const defaultValue = {
-  name: "",
-  price: "",
-  stock: "",
+  title: "",
+  description: "",
 };
 
 const convertToMB = (bytes: number) => {
@@ -24,10 +23,10 @@ const convertToMB = (bytes: number) => {
 
 export default function page() {
   const config = {
-    back_url: "../products",
-    back_push: "/umkm/master/products",
-    submit_api: "/products",
-    title_form: "Tambah Data Produk",
+    back_url: "../activities",
+    back_push: "/members/activities",
+    submit_api: "/activities",
+    title_form: "Tambah Data Kegiatan",
   };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -43,28 +42,22 @@ export default function page() {
     e.target.files && setFile(e.target.files[0]);
   };
 
-  const nameProps = {
+  const titleProps = {
     handleChange: handleChange,
-    label: "Nama Produk",
-    name: "name",
+    label: "Judul Kegiatan",
+    placeholder: "Masukkan Judul Kegiatan",
+    name: "title",
     type: "text",
-    value: values.name,
+    value: values.title,
   };
 
-  const priceProps = {
+  const descriptionProps = {
     handleChange: handleChange,
-    label: "Harga Produk",
-    name: "price",
-    type: "number",
-    value: values.price,
-  };
-
-  const stockProps = {
-    handleChange: handleChange,
-    label: "Stok Produk",
-    name: "stock",
-    type: "number",
-    value: values.stock,
+    label: "Deskripsi Kegiatan",
+    placeholder: "Masukkan Deskripsi Kegiatan",
+    name: "description",
+    value: values.description,
+    rows: 7,
   };
 
   const uploadProps = {
@@ -82,9 +75,8 @@ export default function page() {
     }
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("name", values.name);
-    formData.append("price", values.price);
-    formData.append("stock", values.stock);
+    formData.append("title", values.title);
+    formData.append("description", values.description);
 
     try {
       setIsLoading(true);
@@ -120,9 +112,8 @@ export default function page() {
         isLoading={isLoading}
         title={config.title_form}
       >
-        <Input props={nameProps} />
-        <Input props={priceProps} />
-        <Input props={stockProps} />
+        <Input props={titleProps} />
+        <Textarea props={descriptionProps} />
         {file ? (
           <div className="mb-4.5">
             <p>Nama File : {file.name}</p>
@@ -138,7 +129,12 @@ export default function page() {
             </button>
           </div>
         ) : (
-          <Upload props={uploadProps} />
+          <>
+            <div className="mb-3 block text-sm font-medium text-black dark:text-white">
+              Pilih Gambar Kegiatan
+            </div>
+            <Upload props={uploadProps} />
+          </>
         )}
       </LayoutForm>
     </>

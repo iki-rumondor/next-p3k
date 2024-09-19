@@ -37,6 +37,10 @@ export default function page() {
       redirect("/guests/dashboard");
     }
 
+    if (decodeToken.role == "MEMBER") {
+      redirect("/members/dashboard");
+    }
+
     localStorage.clear();
     redirect("/auth/login");
   }, []);

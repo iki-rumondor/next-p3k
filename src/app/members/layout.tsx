@@ -1,5 +1,5 @@
 "use client";
-import AdminLayout from "@/components/Layouts/AdminLayout";
+import MemberLayout from "@/components/Layouts/MemberLayout";
 import { ReloadProvider } from "context/reload_context";
 import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
@@ -24,16 +24,16 @@ export default function layout({
       redirect("/auth/login");
     }
     const decodeToken = jwtDecode<TokenPayload>(token);
-    if (decodeToken.role != "ADMIN") {
+    if (decodeToken.role != "MEMBER") {
       redirect("/home");
     }
     setIsCheck(true);
   }, []);
   return !isCheck ? null : (
     <>
-      <AdminLayout>
+      <MemberLayout>
         <ReloadProvider>{children}</ReloadProvider>
-      </AdminLayout>
+      </MemberLayout>
     </>
   );
 }

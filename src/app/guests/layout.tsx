@@ -1,9 +1,15 @@
 "use client";
-import AdminLayout from "@/components/Layouts/AdminLayout";
 import GuestLayout from "@/components/Layouts/GuestLayout";
 import { ReloadProvider } from "context/reload_context";
+import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
+
+interface TokenPayload {
+  uuid: string;
+  role: string;
+  exp: number;
+}
 
 export default function layout({
   children,
@@ -16,6 +22,10 @@ export default function layout({
     if (!token) {
       localStorage.clear();
       redirect("/auth/login");
+    }
+    const decodeToken = jwtDecode<TokenPayload>(token);
+    if (decodeToken.role != "GUEST") {
+      redirect("/home");
     }
     setIsCheck(true);
   }, []);

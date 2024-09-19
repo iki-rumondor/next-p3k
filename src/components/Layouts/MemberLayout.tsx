@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import DashboardIcon from "@/components/Icons/DashboardIcon";
-import ListIcon from "@/components/Icons/ListIcon";
-import ClipboardIcon from "@/components/Icons/ClipboardIcon";
 
 const menuGroups = [
   {
@@ -13,34 +11,17 @@ const menuGroups = [
       {
         icon: <DashboardIcon />,
         label: "Dashboard",
-        route: "/admin/dashboard",
-      },
-      {
-        icon: <ListIcon />,
-        label: "Master",
-        route: "#",
-        children: [
-          { label: "Kategori", route: "/admin/master/categories" },
-          { label: "Umkm", route: "/admin/master/umkm" },
-          { label: "Anggota", route: "/admin/master/members" },
-          { label: "Masyarakat", route: "/admin/master/citizens" },
-        ],
-      },
-      {
-        icon: <ClipboardIcon />,
-        label: "Verifikasi",
-        route: "#",
-        children: [{ label: "Akun Pembeli", route: "/admin/verify/guests" }],
+        route: "/members/dashboard",
       },
       {
         icon: <DashboardIcon />,
         label: "Kegiatan PKK",
-        route: "/admin/activities",
+        route: "/members/activities",
       },
     ],
   },
 ];
-export default function AdminLayout({
+export default function MemberLayout({
   children,
 }: {
   children: React.ReactNode;
