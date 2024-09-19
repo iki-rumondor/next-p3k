@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import BasicCard from "@/components/Card/BasicCard";
 import moment from "moment";
+import post_data from "actions/post_data";
 
 const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
@@ -26,7 +27,7 @@ export default function page({ params }: { params: { uuid: string } }) {
   const config = {
     back_url: "../transactions",
     back_push: "/umkm/transactions",
-    load_api: `/transactions/${params.uuid}`,
+    default_endpoint: `/transactions/${params.uuid}`,
   };
 
   const [isCheck, setIsCheck] = useState(false);
@@ -38,12 +39,48 @@ export default function page({ params }: { params: { uuid: string } }) {
     const token = localStorage.getItem("token") || "";
     try {
       setIsLoading(true);
-      const resp = await get_data(token, config.load_api);
+      const resp = await get_data(token, config.default_endpoint);
       setValues(resp.data);
       setIsCheck(true);
     } catch (error: any) {
       toast.error(error.message);
       router.push(config.back_push);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAccept = async () => {
+    const token = localStorage.getItem("token") || "";
+    try {
+      setIsLoading(true);
+      const response = await post_data(
+        token,
+        `${config.default_endpoint}/accept`,
+        "PATCH"
+      );
+      toast.success(response.message);
+      router.push(config.back_push);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUnaccept = async () => {
+    const token = localStorage.getItem("token") || "";
+    try {
+      setIsLoading(true);
+      const response = await post_data(
+        token,
+        `${config.default_endpoint}/unaccept`,
+        "PATCH"
+      );
+      toast.success(response.message);
+      router.push(config.back_push);
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -86,20 +123,36 @@ export default function page({ params }: { params: { uuid: string } }) {
               value={values?.user?.phone_number}
             />
           </div>
-          <div className="flex flex-col gap-3 px-6.5 mb-4">
-            <button className="bg-primary px-5 py-2 text-white hover:bg-blue-800">
-              Transaksi Selesai
-            </button>
-            <button className="bg-danger px-5 py-2 text-white hover:bg-rose-700">
-              Tolak Pembelian
-            </button>
-          </div>
+          {values?.is_response ? (
+            <div
+              className={`text-center ${
+                values?.is_accept ? "bg-primary" : "bg-danger"
+              } py-3 text-white`}
+            >
+              {values?.is_accept ? "TRANSAKSI SELESAI" : "PEMBELIAN DITOLAK"}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 px-6.5 mb-4">
+              <button
+                onClick={handleAccept}
+                className="bg-primary px-5 py-2 text-white hover:bg-blue-800"
+              >
+                Transaksi Selesai
+              </button>
+              <button
+                onClick={handleUnaccept}
+                className="bg-danger px-5 py-2 text-white hover:bg-rose-700"
+              >
+                Tolak Pembelian
+              </button>
+            </div>
+          )}
         </BasicCard>
         <div>
           <div className="bg-white dark:bg-boxdark md:w-5/6 mx-auto mt-3 md:mt-0">
-            <div className="h-50 overflow-hidden">
+            <div className="relative h-50 overflow-hidden bg-zinc-50">
               <img
-                className=""
+                className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2"
                 src={`${baseAPIUrl}/files/products/${values?.product?.image_name}`}
                 alt={`${values?.product?.name}`}
               />

@@ -22,6 +22,7 @@ const menuGroups = [
         children: [
           { label: "Kategori", route: "/admin/master/categories" },
           { label: "Umkm", route: "/admin/master/umkm" },
+          { label: "Masyarakat", route: "/admin/master/citizens" },
         ],
       },
       {

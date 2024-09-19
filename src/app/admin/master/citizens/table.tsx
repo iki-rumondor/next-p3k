@@ -1,10 +1,11 @@
 import EyeIcon from "@/components/Icons/EyeIcon";
-import { ProductTransaction } from "@/types/product_transaction";
+import { Citizen } from "@/types/citizen";
+import moment from "moment";
 import Link from "next/link";
 import React from "react";
 
 interface TableProps {
-  data: ProductTransaction[];
+  data: Citizen[];
 }
 
 const MainTable: React.FC<TableProps> = ({ data }) => {
@@ -13,7 +14,7 @@ const MainTable: React.FC<TableProps> = ({ data }) => {
       <div className="max-w-full overflow-x-auto">
         <div className="border-b border-stroke pb-4 dark:border-strokedark mb-4">
           <h3 className="font-medium text-black dark:text-white">
-            Transaksi Pembelian Produk UMKM
+            Master Data Masyarakat
           </h3>
         </div>
         {data.length > 0 && (
@@ -21,13 +22,13 @@ const MainTable: React.FC<TableProps> = ({ data }) => {
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
                 <th className=" px-4 py-4 font-medium text-black dark:text-white">
-                  Nama Produk
+                  Nama
                 </th>
                 <th className=" px-4 py-4 font-medium text-black dark:text-white">
-                  Pembeli
+                  NIK
                 </th>
                 <th className=" px-4 py-4 font-medium text-black dark:text-white">
-                  Status
+                  Waktu Ditambahkan
                 </th>
                 <th className="px-4 py-4 font-medium text-black dark:text-white">
                   Aksi
@@ -38,36 +39,20 @@ const MainTable: React.FC<TableProps> = ({ data }) => {
               {data.map((item, key) => (
                 <tr key={key}>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">
-                      {item.product.name}
-                    </p>
+                    <p className="text-black dark:text-white">{item.name}</p>
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                    <p className="text-black dark:text-white">{item.nik}</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {item.user.name}
-                    </p>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p
-                      className={`inline-block px-2 py-1 text-sm text-white rounded-full ${
-                        item.is_response
-                          ? item.is_accept
-                            ? "bg-success"
-                            : "bg-danger"
-                          : "bg-warning"
-                      }`}
-                    >
-                      {item.is_response
-                        ? item.is_accept
-                          ? "Sukses"
-                          : "Ditolak"
-                        : "Belum Diproses"}
+                      {moment.unix(item.created_at / 1000).fromNow()}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <div className="flex items-center space-x-3.5">
                       <Link
-                        href={`transactions/${item.uuid}`}
+                        href={`citizens/${item.uuid}`}
                         className="hover:text-primary"
                       >
                         <EyeIcon />
