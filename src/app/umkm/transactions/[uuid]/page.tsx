@@ -1,13 +1,6 @@
 "use client";
-import Input from "@/components/Forms/Input";
-import LayoutForm from "@/components/Forms/Layout";
-import Select from "@/components/Forms/Select";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
-import DeleteIcon from "@/components/Icons/DeleteIcon";
 import Loader from "@/components/Loader";
-import DeleteModal from "@/components/Modal/DeleteModal";
-import { Category } from "@/types/category";
-import post_data from "actions/post_data";
 import get_data from "actions/get_data";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,11 +9,15 @@ import toast from "react-hot-toast";
 import BasicCard from "@/components/Card/BasicCard";
 import moment from "moment";
 
+const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+
 const ListItem = ({ name, value }: { name: string; value: any }) => {
   return (
     <div className="grid grid-cols-2 gap-3 mb-3">
       <p>{name} :</p>
-      <p className="text-right font-medium text-black-2 dark:text-white">{value}</p>
+      <p className="text-right font-medium text-black-2 dark:text-white">
+        {value}
+      </p>
     </div>
   );
 };
@@ -103,8 +100,8 @@ export default function page({ params }: { params: { uuid: string } }) {
             <div className="h-50 overflow-hidden">
               <img
                 className=""
-                src="https://flowbite.com/docs/images/blog/image-1.jpg"
-                alt=""
+                src={`${baseAPIUrl}/files/products/${values?.product?.image_name}`}
+                alt={`${values?.product?.name}`}
               />
             </div>
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">

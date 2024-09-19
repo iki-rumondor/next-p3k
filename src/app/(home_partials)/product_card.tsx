@@ -6,17 +6,20 @@ interface Props {
   name: string;
   price: number;
   stock: number;
+  image_name: string;
   category: string;
 }
+
+const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 export const ProductCard = ({ props }: { props: Props }) => {
   return (
     <div className="relative bg-white shadow-md border border-gray-2 rounded-lg">
-      <div className="relative">
+      <div className="relative h-50 overflow-hidden bg-whiten">
         <img
-          className="rounded-t-lg"
-          src="https://flowbite.com/docs/images/blog/image-1.jpg"
-          alt=""
+          className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2"
+          src={`${baseAPIUrl}/files/products/${props?.image_name}`}
+          alt={`${props?.name}`}
         />
         <p className="bottom-0 absolute m-4 px-3 py-1 bg-primary text-white rounded-full text-sm font-medium">
           {props?.category}

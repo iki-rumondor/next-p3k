@@ -11,7 +11,7 @@ export default function Upload({ props }: { props: Props }) {
   return (
     <div
       id="FileUpload"
-      className="relative mb-4.5 block w-full cursor-pointer appearance-none rounded border border-dashed border-primary bg-gray px-4 py-4 dark:bg-meta-4 sm:py-7.5"
+      className="relative block w-full cursor-pointer appearance-none rounded border border-dashed border-primary bg-gray px-4 py-4 dark:bg-meta-4 sm:py-7.5"
     >
       <input
         onChange={props.handleChange}

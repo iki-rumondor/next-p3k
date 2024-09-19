@@ -1,7 +1,6 @@
 "use client";
 import { Product } from "@/types/product";
 import get_data from "actions/get_data";
-import HomeHeader from "app/(home_partials)/header";
 import { ProductCard } from "app/(home_partials)/product_card";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -11,7 +10,6 @@ export default function page() {
   const [data, setData] = useState<Product[]>([]);
 
   const handleLoad = async () => {
-    const token = localStorage.getItem("token") || "";
     try {
       setIsLoading(true);
       const response = await get_data("", "/public/products");
@@ -40,6 +38,7 @@ export default function page() {
                 name: item.name,
                 price: item.price,
                 stock: item.stock,
+                image_name: item.image_name,
                 category: item.shop.category.name,
               }}
             />

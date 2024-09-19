@@ -1,17 +1,22 @@
 "use client";
 import Input from "@/components/Forms/Input";
 import LayoutForm from "@/components/Forms/Layout";
+import Upload from "@/components/Forms/Upload";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
 import DeleteIcon from "@/components/Icons/DeleteIcon";
 import Loader from "@/components/Loader";
 import DeleteModal from "@/components/Modal/DeleteModal";
-import { Category } from "@/types/category";
 import get_data from "actions/get_data";
 import post_data from "actions/post_data";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
+const convertToMB = (bytes: number) => {
+  const size = (bytes / (1024 * 1024)).toFixed(2);
+  return `${size} MB`;
+};
 
 export default function page({ params }: { params: { uuid: string } }) {
   const config = {
@@ -24,11 +29,16 @@ export default function page({ params }: { params: { uuid: string } }) {
   const [open, setOpen] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [values, setValues] = useState<any>({});
+  const [file, setFile] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleChange = (e: any) => {
     setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const handleChangeFile = (e: any) => {
+    e.target.files && setFile(e.target.files[0]);
   };
 
   const nameProps = {
@@ -55,6 +65,12 @@ export default function page({ params }: { params: { uuid: string } }) {
     value: values.stock,
   };
 
+  const uploadProps = {
+    primary: "File Harus Dalam Format Gambar",
+    secondary: "(Ukuran Max: 1MB)",
+    handleChange: handleChangeFile,
+  };
+
   const handleLoad = async () => {
     const token = localStorage.getItem("token") || "";
     try {
@@ -78,15 +94,20 @@ export default function page({ params }: { params: { uuid: string } }) {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const token = localStorage.getItem("token") || "";
-    const price = parseInt(values.price);
-    const stock = parseInt(values.stock);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("name", values.name);
+    formData.append("price", values.price);
+    formData.append("stock", values.stock);
     try {
       setIsLoading(true);
-      const response = await post_data(token, config.default_api, "PUT", {
-        ...values,
-        price,
-        stock,
-      });
+      const response = await post_data(
+        token,
+        config.default_api,
+        "PUT",
+        formData,
+        true
+      );
       toast.success(response.message);
       router.push(config.back_push);
     } catch (error: any) {
@@ -155,6 +176,26 @@ export default function page({ params }: { params: { uuid: string } }) {
         <Input props={nameProps} />
         <Input props={priceProps} />
         <Input props={stockProps} />
+        {file ? (
+          <div className="mb-4.5">
+            <p>Nama File : {file.name}</p>
+            <p>Ukuran : {convertToMB(file.size)}</p>
+            <button
+              onClick={() => setFile(null)}
+              className="inline-flex items-center justify-center gap-1.5 font-small bg-rose-500 text-white px-2 py-1 rounded-md mt-2 hover:bg-rose-600"
+            >
+              <span>
+                <DeleteIcon />
+              </span>
+              Hapus
+            </button>
+          </div>
+        ) : (
+          <>
+            <Upload props={uploadProps} />
+            <small>*Kosongkan jika tidak ingin diubah</small>
+          </>
+        )}
       </LayoutForm>
 
       {open && <DeleteModal props={deleteProps} />}
