@@ -1,31 +1,40 @@
+import Link from "next/link";
 import React from "react";
 
-export const BlogCard = () => {
+interface Props {
+  uuid: string;
+  title: string;
+  description: string;
+  image_name: string;
+}
+
+const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+
+export const BlogCard = ({ props }: { props: Props }) => {
   return (
-    <div className="relative bg-white shadow-md border border-gray-2 rounded-lg max-w-sm">
-      <a href="#">
+    <div className="relative bg-white shadow-md border border-gray-2 rounded-lg mb-5">
+      <div className="relative h-50 overflow-hidden">
         <img
-          className="rounded-t-lg"
-          src="https://flowbite.com/docs/images/blog/image-1.jpg"
-          alt=""
+          className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2"
+          src={`${baseAPIUrl}/files/activities/${props?.image_name}`}
+          alt={`${props?.title}`}
         />
-      </a>
+      </div>
       <div className="p-5">
         <a href="#">
           <h5 className="text-gray-900 font-bold text-2xl tracking-tight mb-2">
-            Noteworthy technology acquisitions 2021
+            {props?.title}
           </h5>
         </a>
-        <p className="font-normal text-gray-700 mb-3">
-          Here are the biggest enterprise technology acquisitions of 2021 so
-          far, in reverse chronological order.
+        <p className="font-normal text-gray-700 mb-3 blog-description">
+          {props?.description}
         </p>
-        <a
-          className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center"
-          href="#"
+        <Link
+          className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-sm text-sm px-3 py-2 text-center inline-flex items-center"
+          href={`activities/${props.uuid}`}
         >
-          Read more
-        </a>
+          Baca Selengkapnya
+        </Link>
       </div>
     </div>
   );

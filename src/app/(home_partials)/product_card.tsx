@@ -14,7 +14,7 @@ const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 export const ProductCard = ({ props }: { props: Props }) => {
   return (
-    <div className="relative bg-white shadow-md border border-gray-2 rounded-lg">
+    <div className="relative bg-white shadow-md border border-gray-2 rounded-lg mb-5">
       <div className="relative h-50 overflow-hidden bg-whiten">
         <img
           className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2"

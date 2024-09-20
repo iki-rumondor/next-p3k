@@ -1,13 +1,28 @@
+"use client";
 import Link from "next/link";
 import HomeHeader from "./(home_partials)/header";
 import { BlogCard } from "./(home_partials)/blog_card";
 import { ProductCard } from "./(home_partials)/product_card";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [open, setOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLogin(true);
+    }
+  }, []);
+
   return (
     <div className="bg-white">
       <div className="sticky top-0 z-50">
-        <HomeHeader />
+        <HomeHeader isLogin={isLogin} handleOpen={handleOpen} />
       </div>
       <div className="h-screen flex flex-col">
         <div className="relative flex-grow bg-homepage bg-no-repeat bg-cover bg-center h-full flex justify-center items-center text-white">
@@ -54,14 +69,16 @@ export default function Home() {
           Arsip Kegiatan
         </div>
         <div className="grid grid-cols-3 gap-2">
+          {/* <BlogCard />
           <BlogCard />
           <BlogCard />
-          <BlogCard />
-          <BlogCard />
+          <BlogCard /> */}
         </div>
-        <p className="mt-10 text-center text-md font-bold bg-primary text-white py-2">
-          Selengkapnya..
-        </p>
+        <div className="w-full mt-10 text-center text-md bg-primary text-white py-2">
+          <Link href={"/activities"} className="w-full block">
+            Selengkapnya..
+          </Link>
+        </div>
       </section>
     </div>
   );
