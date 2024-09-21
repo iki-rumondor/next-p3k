@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+
 export default function page({ params }: { params: { uuid: string } }) {
   const config = {
     back_url: "../products",
@@ -37,11 +39,11 @@ export default function page({ params }: { params: { uuid: string } }) {
     try {
       setIsLoading(true);
       const resp = await get_data(token, `/public/products/${params.uuid}`);
-
       setValues({
         name: resp.data.name,
         price: resp.data.price,
         stock: resp.data.stock,
+        image_name: resp.data.image_name,
         umkm: resp.data?.shop?.name,
       });
       setIsCheck(true);
@@ -101,8 +103,8 @@ export default function page({ params }: { params: { uuid: string } }) {
         <div>
           <img
             className=""
-            src="https://flowbite.com/docs/images/blog/image-1.jpg"
-            alt=""
+            src={`${baseAPIUrl}/files/products/${values?.image_name}`}
+            alt={`${values?.name}`}
           />
         </div>
         <div className="flex items-end">
@@ -122,9 +124,9 @@ export default function page({ params }: { params: { uuid: string } }) {
               >
                 Beli Produk
               </button>
-              <button className="bg-warning hover:bg-yellow-700 px-7 py-2 text-white mt-6">
+              {/* <button className="bg-warning hover:bg-yellow-700 px-7 py-2 text-white mt-6">
                 Tambahkan Ke Favorit
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

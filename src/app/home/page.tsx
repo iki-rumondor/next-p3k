@@ -41,6 +41,10 @@ export default function page() {
       redirect("/members/dashboard");
     }
 
+    if (decodeToken.role == "CITIZEN") {
+      redirect("/citizens/dashboard");
+    }
+
     localStorage.clear();
     redirect("/auth/login");
   }, []);
