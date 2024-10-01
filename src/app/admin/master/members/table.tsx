@@ -25,9 +25,6 @@ const MainTable: React.FC<TableProps> = ({ data }) => {
                   Nama
                 </th>
                 <th className=" px-4 py-4 font-medium text-black dark:text-white">
-                  Pokja
-                </th>
-                <th className=" px-4 py-4 font-medium text-black dark:text-white">
                   Username
                 </th>
                 <th className=" px-4 py-4 font-medium text-black dark:text-white">
@@ -45,10 +42,9 @@ const MainTable: React.FC<TableProps> = ({ data }) => {
                     <p className="text-black dark:text-white">{item.name}</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">{item.group}</p>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">{item.user.username}</p>
+                    <p className="text-black dark:text-white">
+                      {item.user.username}
+                    </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">

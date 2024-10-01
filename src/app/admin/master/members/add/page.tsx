@@ -12,9 +12,17 @@ import toast from "react-hot-toast";
 const defaultValue = {
   name: "",
   group: "",
+  position: "",
 };
 
-const groups = ["POKJA I", "POKJA II", "POKJA III", "POKJA IV", "POKJA V"];
+const groups = [
+  { value: 1, name: "POKJA I" },
+  { value: 2, name: "POKJA II" },
+  { value: 3, name: "POKJA III" },
+  { value: 4, name: "POKJA IV" },
+];
+
+const positions = ["KETUA", "SEKRETARIS", "BENDAHARA", "ANGGOTA"];
 
 export default function page() {
   const config = {
@@ -36,12 +44,25 @@ export default function page() {
     value: values.group,
     options: groups.map((item) => {
       return {
-        name: item,
-        value: item,
+        name: item.name,
+        value: item.value,
       };
     }),
     name: "group",
     label: "Pilih Kelompok Kerja",
+    handleChange: handleChange,
+  };
+
+  const positionProps = {
+    value: values.position,
+    options: positions.map((item) => {
+      return {
+        name: item,
+        value: item,
+      };
+    }),
+    name: "position",
+    label: "Pilih Jabatan",
     handleChange: handleChange,
   };
 
@@ -59,12 +80,11 @@ export default function page() {
     const token = localStorage.getItem("token") || "";
     try {
       setIsLoading(true);
-      const response = await post_data(
-        token,
-        config.submit_api,
-        "POST",
-        values
-      );
+      const groupInt = parseInt(values.group);
+      const response = await post_data(token, config.submit_api, "POST", {
+        ...values,
+        group: groupInt,
+      });
       toast.success(response.message);
       router.push(config.back_push);
     } catch (error: any) {
@@ -91,6 +111,7 @@ export default function page() {
         title={config.title_form}
       >
         <Select props={groupProps} />
+        <Select props={positionProps} />
         <Input props={nameProps} />
       </LayoutForm>
     </>

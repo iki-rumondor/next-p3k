@@ -1,6 +1,7 @@
 "use client";
 import Input from "@/components/Forms/Input";
 import LayoutForm from "@/components/Forms/Layout";
+import Select from "@/components/Forms/Select";
 import Textarea from "@/components/Forms/Textarea";
 import Upload from "@/components/Forms/Upload";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
@@ -14,7 +15,15 @@ import toast from "react-hot-toast";
 const defaultValue = {
   title: "",
   description: "",
+  group: "",
 };
+
+const groups = [
+  { value: 1, name: "POKJA I (PENGHAYATAN DAN PENGALAMAN PANCASILA)" },
+  { value: 2, name: "POKJA II (PENDIDIKAN DAN KETERAMPILAN)" },
+  { value: 3, name: "POKJA III (PANGAN, SANDANG, DAN PERUMAHAN)" },
+  { value: 4, name: "POKJA IV (KESEHATAN, KELESTARIAN LINGKUNGAN HIDUP, DAN PERENCANAAN SEHAT" },
+];
 
 const convertToMB = (bytes: number) => {
   const size = (bytes / (1024 * 1024)).toFixed(2);
@@ -40,6 +49,19 @@ export default function page() {
 
   const handleChangeFile = (e: any) => {
     e.target.files && setFile(e.target.files[0]);
+  };
+
+  const groupProps = {
+    value: values.group,
+    options: groups.map((item) => {
+      return {
+        name: item.name,
+        value: item.value,
+      };
+    }),
+    name: "group",
+    label: "Pilih Kelompok Kerja",
+    handleChange: handleChange,
   };
 
   const titleProps = {
@@ -76,6 +98,7 @@ export default function page() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("title", values.title);
+    formData.append("group", values.group);
     formData.append("description", values.description);
 
     try {
@@ -112,6 +135,7 @@ export default function page() {
         isLoading={isLoading}
         title={config.title_form}
       >
+        <Select props={groupProps} />
         <Input props={titleProps} />
         <Textarea props={descriptionProps} />
         {file ? (

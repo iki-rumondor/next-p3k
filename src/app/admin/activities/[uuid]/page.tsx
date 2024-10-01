@@ -23,6 +23,16 @@ const convertToMB = (bytes: number) => {
   return `${size} MB`;
 };
 
+const groups = [
+  { value: 1, name: "POKJA I (PENGHAYATAN DAN PENGALAMAN PANCASILA)" },
+  { value: 2, name: "POKJA II (PENDIDIKAN DAN KETERAMPILAN)" },
+  { value: 3, name: "POKJA III (PANGAN, SANDANG, DAN PERUMAHAN)" },
+  {
+    value: 4,
+    name: "POKJA IV (KESEHATAN, KELESTARIAN LINGKUNGAN HIDUP, DAN PERENCANAAN SEHAT",
+  },
+];
+
 export default function page({ params }: { params: { uuid: string } }) {
   const config = {
     back_url: "../activities",
@@ -51,6 +61,19 @@ export default function page({ params }: { params: { uuid: string } }) {
 
   const handleChangeFile = (e: any) => {
     e.target.files && setFile(e.target.files[0]);
+  };
+
+  const groupProps = {
+    value: values.group,
+    options: groups.map((item) => {
+      return {
+        name: item.name,
+        value: item.value,
+      };
+    }),
+    name: "group",
+    label: "Pilih Kelompok Kerja",
+    handleChange: handleChange,
   };
 
   const titleProps = {
@@ -91,8 +114,6 @@ export default function page({ params }: { params: { uuid: string } }) {
       setIsLoading(true);
       const resp = await get_data(token, config.default_api);
       setValues(resp.data);
-      console.log(resp.data);
-
       const resp2 = await get_data(
         token,
         `/members/not/activities/${params.uuid}`
@@ -157,6 +178,7 @@ export default function page({ params }: { params: { uuid: string } }) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("title", values.title);
+    formData.append("group", values.group);
     formData.append("description", values.description);
     try {
       setIsLoading(true);
@@ -234,6 +256,7 @@ export default function page({ params }: { params: { uuid: string } }) {
             isLoading={isLoading}
             title={config.title_form}
           >
+            <Select props={groupProps} />
             <Input props={titleProps} />
             <Textarea props={descriptionProps} />
             {file ? (

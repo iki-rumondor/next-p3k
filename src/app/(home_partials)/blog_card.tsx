@@ -6,6 +6,7 @@ interface Props {
   title: string;
   description: string;
   image_name: string;
+  group: string;
 }
 
 const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
@@ -19,6 +20,9 @@ export const BlogCard = ({ props }: { props: Props }) => {
           src={`${baseAPIUrl}/files/activities/${props?.image_name}`}
           alt={`${props?.title}`}
         />
+        <p className="bottom-0 absolute m-4 px-3 py-1 bg-warning text-white rounded-full text-sm font-medium">
+          {props?.group}
+        </p>
       </div>
       <div className="p-5">
         <a href="#">

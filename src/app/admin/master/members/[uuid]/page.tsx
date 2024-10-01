@@ -22,7 +22,14 @@ export default function page({ params }: { params: { uuid: string } }) {
     delete_message: "Apakah anda yakin akan menghapus masyarakat tersebut?",
   };
 
-  const groups = ["POKJA I", "POKJA II", "POKJA III", "POKJA IV", "POKJA V"];
+  const groups = [
+    { value: 1, name: "POKJA I" },
+    { value: 2, name: "POKJA II" },
+    { value: 3, name: "POKJA III" },
+    { value: 4, name: "POKJA IV" },
+  ];
+
+  const positions = ["KETUA", "SEKRETARIS", "BENDAHARA", "ANGGOTA"];
 
   const [open, setOpen] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
@@ -38,12 +45,25 @@ export default function page({ params }: { params: { uuid: string } }) {
     value: values.group,
     options: groups.map((item) => {
       return {
-        name: item,
-        value: item,
+        name: item.name,
+        value: item.value,
       };
     }),
     name: "group",
     label: "Pilih Kelompok Kerja",
+    handleChange: handleChange,
+  };
+
+  const positionProps = {
+    value: values.position,
+    options: positions.map((item) => {
+      return {
+        name: item,
+        value: item,
+      };
+    }),
+    name: "position",
+    label: "Pilih Jabatan",
     handleChange: handleChange,
   };
 
@@ -64,6 +84,7 @@ export default function page({ params }: { params: { uuid: string } }) {
       setValues({
         name: resp.data.name,
         group: resp.data.group,
+        position: resp.data.position,
       });
     } catch (error: any) {
       toast.error(error.message);
@@ -77,14 +98,13 @@ export default function page({ params }: { params: { uuid: string } }) {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const token = localStorage.getItem("token") || "";
+    const groupInt = parseInt(values.group);
     try {
       setIsLoading(true);
-      const response = await post_data(
-        token,
-        config.default_api,
-        "PUT",
-        values
-      );
+      const response = await post_data(token, config.default_api, "PUT", {
+        ...values,
+        group: groupInt,
+      });
       toast.success(response.message);
       router.push(config.back_push);
     } catch (error: any) {
@@ -151,6 +171,7 @@ export default function page({ params }: { params: { uuid: string } }) {
         title={config.title_form}
       >
         <Select props={groupProps} />
+        <Select props={positionProps} />
         <Input props={nameProps} />
       </LayoutForm>
 
