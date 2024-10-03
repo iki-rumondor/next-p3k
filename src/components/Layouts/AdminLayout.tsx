@@ -30,7 +30,10 @@ const menuGroups = [
         icon: <ClipboardIcon />,
         label: "Verifikasi",
         route: "#",
-        children: [{ label: "Akun Pembeli", route: "/admin/verify/guests" }],
+        children: [
+          { label: "Akun Penjual", route: "/admin/verify/shops" },
+          { label: "Akun Pembeli", route: "/admin/verify/guests" },
+        ],
       },
       {
         icon: <DashboardIcon />,
