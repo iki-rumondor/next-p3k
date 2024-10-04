@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import BasicCard from "@/components/Card/BasicCard";
 import moment from "moment";
 import post_data from "actions/post_data";
+import axios from "axios";
 
 const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
@@ -86,6 +87,35 @@ export default function page({ params }: { params: { uuid: string } }) {
     }
   };
 
+  const handleGetProofImage = async (filename: string) => {
+    if (!filename) {
+      toast.error("Filename tidak ditemukan");
+      return;
+    }
+
+    const accessToken = localStorage.getItem("token");
+    try {
+      setIsLoading(true);
+      const response = await axios({
+        method: "GET",
+        url: `${baseAPIUrl}/files/transaction_proofs/${filename}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        responseType: "blob",
+      });
+      const url = window.URL.createObjectURL(response.data);
+      window.open(url, "_blank");
+    } catch (error: any) {
+      const message = error?.response?.data?.message
+        ? error.response.data.message
+        : error.message;
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     handleLoad();
   }, []);
@@ -122,6 +152,22 @@ export default function page({ params }: { params: { uuid: string } }) {
               name="Kontak Pembeli"
               value={values?.user?.phone_number}
             />
+            {values?.proof_file ? (
+              <ListItem
+                name="Bukti Pembayaran"
+                value={
+                  <a
+                    onClick={() => handleGetProofImage(values?.proof_file)}
+                    href="#"
+                    className="text-primary hover:text-blue-800"
+                  >
+                    Lihat
+                  </a>
+                }
+              />
+            ) : (
+              <ListItem name="Bukti Pembayaran" value={"Belum Ada"} />
+            )}
           </div>
           {values?.is_response ? (
             <div
@@ -161,7 +207,10 @@ export default function page({ params }: { params: { uuid: string } }) {
               Stok Produk : <span>{values?.product?.stock}</span>
             </div>
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
-              Harga Per Produk : Rp.<span>{values?.product?.price}</span>
+              Harga Produk : Rp.
+              <span>
+                {values?.product?.price}/{values?.product?.unit}
+              </span>
             </div>
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
               Ditambahkan Pada :{" "}

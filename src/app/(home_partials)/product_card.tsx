@@ -8,6 +8,7 @@ interface Props {
   stock: number;
   image_name: string;
   category: string;
+  unit: string;
 }
 
 const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
@@ -32,7 +33,9 @@ export const ProductCard = ({ props }: { props: Props }) => {
         <small className="font-normal text-gray-700">
           Sisa Stok: {props?.stock}
         </small>
-        <p className="font-normal text-gray-700 mt-1">Rp.{props?.price}</p>
+        <p className="font-normal text-gray-700 mt-1">
+          Rp.{props?.price}/{props?.unit}
+        </p>
         <Link
           className="text-blue-700 hover:text-blue-800 font-medium rounded-lg text-sm mt-4"
           href={`products/${props.uuid}`}

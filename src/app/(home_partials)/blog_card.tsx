@@ -6,7 +6,7 @@ interface Props {
   title: string;
   description: string;
   image_name: string;
-  group: string;
+  group: number;
 }
 
 const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;

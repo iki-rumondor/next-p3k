@@ -1,11 +1,13 @@
 "use client";
 import Input from "@/components/Forms/Input";
 import LayoutForm from "@/components/Forms/Layout";
+import Select from "@/components/Forms/Select";
 import Upload from "@/components/Forms/Upload";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
 import DeleteIcon from "@/components/Icons/DeleteIcon";
 import Loader from "@/components/Loader";
 import DeleteModal from "@/components/Modal/DeleteModal";
+import { Category } from "@/types/category";
 import get_data from "actions/get_data";
 import post_data from "actions/post_data";
 import Link from "next/link";
@@ -31,6 +33,9 @@ export default function page({ params }: { params: { uuid: string } }) {
   const [values, setValues] = useState<any>({});
   const [file, setFile] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [categories, setCategories] = useState<
+    { name: string; value: string }[]
+  >([]);
   const router = useRouter();
 
   const handleChange = (e: any) => {
@@ -39,6 +44,14 @@ export default function page({ params }: { params: { uuid: string } }) {
 
   const handleChangeFile = (e: any) => {
     e.target.files && setFile(e.target.files[0]);
+  };
+
+  const categoryProps = {
+    options: categories,
+    handleChange: handleChange,
+    label: "Pilih Kategori Produk",
+    name: "category_uuid",
+    value: values.category_uuid,
   };
 
   const nameProps = {
@@ -65,6 +78,14 @@ export default function page({ params }: { params: { uuid: string } }) {
     value: values.stock,
   };
 
+  const unitProps = {
+    handleChange: handleChange,
+    label: "Satuan Produk",
+    name: "unit",
+    type: "text",
+    value: values.unit,
+  };
+
   const uploadProps = {
     primary: "File Harus Dalam Format Gambar",
     secondary: "(Ukuran Max: 1MB)",
@@ -77,11 +98,18 @@ export default function page({ params }: { params: { uuid: string } }) {
       setIsLoading(true);
 
       const resp = await get_data(token, config.default_api);
-      setValues({
-        name: resp.data.name,
-        price: resp.data.price,
-        stock: resp.data.stock,
-      });
+      setValues(resp.data);
+
+      const response = await get_data(token, "/categories");
+      response.data &&
+        setCategories(
+          response.data.map((item: Category) => {
+            return {
+              name: item.name,
+              value: item.uuid,
+            };
+          })
+        );
     } catch (error: any) {
       toast.error(error.message);
       router.push(config.back_push);
@@ -96,9 +124,11 @@ export default function page({ params }: { params: { uuid: string } }) {
     const token = localStorage.getItem("token") || "";
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("category_uuid", values.category_uuid);
     formData.append("name", values.name);
     formData.append("price", values.price);
     formData.append("stock", values.stock);
+    formData.append("unit", values.unit);
     try {
       setIsLoading(true);
       const response = await post_data(
@@ -173,9 +203,11 @@ export default function page({ params }: { params: { uuid: string } }) {
         isLoading={isLoading}
         title={config.title_form}
       >
+        <Select props={categoryProps} />
         <Input props={nameProps} />
         <Input props={priceProps} />
         <Input props={stockProps} />
+        <Input props={unitProps} />
         {file ? (
           <div className="mb-4.5">
             <p>Nama File : {file.name}</p>

@@ -39,7 +39,8 @@ export default function page() {
                 price: item.price,
                 stock: item.stock,
                 image_name: item.image_name,
-                category: item.shop.category.name,
+                category: item.category_name,
+                unit: item.unit,
               }}
             />
           ))}

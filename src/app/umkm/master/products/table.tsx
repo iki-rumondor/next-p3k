@@ -23,10 +23,16 @@ const MainTable: React.FC<TableProps> = ({ data }) => {
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
                 <th className=" px-4 py-4 font-medium text-black dark:text-white">
+                  Kategori
+                </th>
+                <th className=" px-4 py-4 font-medium text-black dark:text-white">
                   Nama
                 </th>
                 <th className=" px-4 py-4 font-medium text-black dark:text-white">
                   Harga
+                </th>
+                <th className=" px-4 py-4 font-medium text-black dark:text-white">
+                  Satuan
                 </th>
                 <th className=" px-4 py-4 font-medium text-black dark:text-white">
                   Stok
@@ -43,16 +49,26 @@ const MainTable: React.FC<TableProps> = ({ data }) => {
               {data.map((item, key) => (
                 <tr key={key}>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                    <p className="text-black dark:text-white">{item.category_name}</p>
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">{item.name}</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">{item.price}</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                    <p className="text-black dark:text-white">{item.unit}</p>
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">{item.stock}</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <a target="_blank" href={`${baseAPIUrl}/files/products/${item.image_name}`} className="text-sm text-white bg-primary px-2 py-1">
+                    <a
+                      target="_blank"
+                      href={`${baseAPIUrl}/files/products/${item.image_name}`}
+                      className="text-sm text-white bg-primary px-2 py-1"
+                    >
                       Lihat
                     </a>
                   </td>

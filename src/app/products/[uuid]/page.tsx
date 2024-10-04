@@ -45,6 +45,7 @@ export default function page({ params }: { params: { uuid: string } }) {
         stock: resp.data.stock,
         image_name: resp.data.image_name,
         umkm: resp.data?.shop?.name,
+        unit: resp.data?.unit,
       });
       setIsCheck(true);
     } catch (error: any) {
@@ -114,7 +115,7 @@ export default function page({ params }: { params: { uuid: string } }) {
             </div>
             <div>Oleh: {values?.umkm}</div>
             <div className="font-medium text-xl text-zinc-500 mt-2">
-              Rp. {values?.price}
+              Rp. {values?.price}/{values?.unit}
             </div>
             <div className="mt-1">Sisa Stok : {values?.stock}</div>
             <div className="flex gap-3">

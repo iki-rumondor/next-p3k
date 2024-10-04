@@ -6,6 +6,7 @@ export type ProductTransaction = {
   quantity: string;
   is_response: boolean;
   is_accept: boolean;
+  proof_file: string;
   created_at: number;
   updated_at: number;
   user: User;
