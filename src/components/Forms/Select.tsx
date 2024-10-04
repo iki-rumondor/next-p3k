@@ -7,6 +7,7 @@ interface SelectProps {
   value: string;
   name: string;
   handleChange: (e: any) => void;
+  disabled?: boolean;
 }
 
 export default function Select({ props }: { props: SelectProps }) {
@@ -20,6 +21,7 @@ export default function Select({ props }: { props: SelectProps }) {
           <DashboardIcon />
         </span>
         <select
+          disabled={props?.disabled}
           onChange={props.handleChange}
           name={props.name}
           value={props.value}

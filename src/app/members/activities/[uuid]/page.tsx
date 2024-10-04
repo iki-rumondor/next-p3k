@@ -1,32 +1,44 @@
 "use client";
+import BasicCard from "@/components/Card/BasicCard";
 import Input from "@/components/Forms/Input";
 import LayoutForm from "@/components/Forms/Layout";
+import Select from "@/components/Forms/Select";
 import Textarea from "@/components/Forms/Textarea";
 import Upload from "@/components/Forms/Upload";
+import UploadInput from "@/components/Forms/UploadInput";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
 import DeleteIcon from "@/components/Icons/DeleteIcon";
 import Loader from "@/components/Loader";
 import DeleteModal from "@/components/Modal/DeleteModal";
+import { Member } from "@/types/member";
 import get_data from "actions/get_data";
 import post_data from "actions/post_data";
+import axios from "axios";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-const convertToMB = (bytes: number) => {
-  const size = (bytes / (1024 * 1024)).toFixed(2);
-  return `${size} MB`;
+const groups = [
+  { value: 1, name: "POKJA I (PENGHAYATAN DAN PENGALAMAN PANCASILA)" },
+  { value: 2, name: "POKJA II (PENDIDIKAN DAN KETERAMPILAN)" },
+  { value: 3, name: "POKJA III (PANGAN, SANDANG, DAN PERUMAHAN)" },
+  {
+    value: 4,
+    name: "POKJA IV (KESEHATAN, KELESTARIAN LINGKUNGAN HIDUP, DAN PERENCANAAN SEHAT",
+  },
+];
+
+const defaultData = {
+  longitude: "",
+  latitude: "",
 };
 
 export default function page({ params }: { params: { uuid: string } }) {
   const config = {
     back_url: "../activities",
     back_push: "/members/activities",
-    default_api: `/activities/${params.uuid}`,
-    title_form: "Update Data Kegiatan",
-    delete_title: "Apakah anda yakin akan menghapus data kegiatan tersebut?",
   };
 
   const [open, setOpen] = useState(false);
@@ -34,6 +46,9 @@ export default function page({ params }: { params: { uuid: string } }) {
   const [values, setValues] = useState<any>({});
   const [file, setFile] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [data, setData] = useState(defaultData);
+
   const router = useRouter();
 
   const handleChange = (e: any) => {
@@ -44,27 +59,42 @@ export default function page({ params }: { params: { uuid: string } }) {
     e.target.files && setFile(e.target.files[0]);
   };
 
+  const groupProps = {
+    disabled: true,
+    value: values?.activity?.group,
+    options: groups.map((item) => {
+      return {
+        name: item.name,
+        value: item.value,
+      };
+    }),
+    name: "group",
+    label: "Pilih Kelompok Kerja",
+    handleChange: handleChange,
+  };
+
   const titleProps = {
+    disable: true,
     handleChange: handleChange,
     label: "Judul Kegiatan",
     placeholder: "Masukkan Judul Kegiatan",
     name: "title",
     type: "text",
-    value: values.title,
+    value: values?.activity?.title,
   };
 
   const descriptionProps = {
+    disabled: true,
     handleChange: handleChange,
     label: "Deskripsi Kegiatan",
     placeholder: "Masukkan Deskripsi Kegiatan",
     name: "description",
-    value: values.description,
+    value: values.activity?.description,
     rows: 7,
   };
 
   const uploadProps = {
-    primary: "File Harus Dalam Format Gambar",
-    secondary: "(Ukuran Max: 1MB)",
+    label: "Upload Bukti Kehadiran",
     handleChange: handleChangeFile,
   };
 
@@ -72,8 +102,7 @@ export default function page({ params }: { params: { uuid: string } }) {
     const token = localStorage.getItem("token") || "";
     try {
       setIsLoading(true);
-
-      const resp = await get_data(token, config.default_api);
+      const resp = await get_data(token, `/members/activities/${params.uuid}`);
       setValues(resp.data);
     } catch (error: any) {
       toast.error(error.message);
@@ -89,14 +118,12 @@ export default function page({ params }: { params: { uuid: string } }) {
     const token = localStorage.getItem("token") || "";
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("title", values.title);
-    formData.append("description", values.description);
     try {
       setIsLoading(true);
       const response = await post_data(
         token,
-        config.default_api,
-        "PUT",
+        `/activities/${params.uuid}/attendance`,
+        "POST",
         formData,
         true
       );
@@ -109,30 +136,39 @@ export default function page({ params }: { params: { uuid: string } }) {
     }
   };
 
-  const handleDelete = async () => {
-    const token = localStorage.getItem("token") || "";
+  const handleGetFile = async (filename: string) => {
+    if (!filename) {
+      toast.error("Filename tidak ditemukan");
+      return;
+    }
+
+    const accessToken = localStorage.getItem("token");
+    const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
     try {
       setIsLoading(true);
-      const response = await post_data(token, config.default_api, "DELETE");
-      toast.success(response.message);
-      router.push(config.back_push);
+      const response = await axios({
+        method: "GET",
+        url: `${baseAPIUrl}/files/attendances/${filename}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        responseType: "blob",
+      });
+      const url = window.URL.createObjectURL(response.data);
+      window.open(url, "_blank");
     } catch (error: any) {
-      toast.error(error.message);
+      const message = error?.response?.data?.message
+        ? error.response.data.message
+        : error.message;
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const deleteProps = {
-    title: config.delete_title,
-    toggleModal: () => setOpen(!open),
-    handleSubmit: handleDelete,
-    isLoading: isLoading,
-  };
-
   useEffect(() => {
     handleLoad();
-  }, []);
+  }, [isSuccess]);
 
   return !isCheck ? (
     <Loader />
@@ -148,59 +184,72 @@ export default function page({ params }: { params: { uuid: string } }) {
           </span>
           Kembali
         </Link>
-        <button
-          onClick={() => {
-            setOpen(true);
-          }}
-          className="inline-flex items-center justify-center gap-2.5 bg-rose-600 px-4 py-2 text-center font-medium text-white hover:bg-opacity-90 mb-4"
-        >
-          <span>
-            <DeleteIcon />
-          </span>
-          Hapus
-        </button>
       </div>
-      <LayoutForm
-        handleSubmit={handleSubmit}
-        isLoading={isLoading}
-        title={config.title_form}
-      >
-        <Input props={titleProps} />
-        <Textarea props={descriptionProps} />
-        {file ? (
-          <div className="mb-4.5">
-            <p>Nama File : {file.name}</p>
-            <p>Ukuran : {convertToMB(file.size)}</p>
-            <button
-              onClick={() => setFile(null)}
-              className="inline-flex items-center justify-center gap-1.5 font-small bg-rose-500 text-white px-2 py-1 rounded-md mt-2 hover:bg-rose-600"
-            >
-              <span>
-                <DeleteIcon />
-              </span>
-              Hapus
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="mb-3 block text-sm font-medium text-black dark:text-white">
-              Pilih Gambar Kegiatan
+      <div className="grid md:grid-cols-5 md:gap-4">
+        <div className="col-span-3">
+          <BasicCard title={"Detail Kegiatan"}>
+            <div className="p-6.5">
+              <Select props={groupProps} />
+              <Input props={titleProps} />
+              <Textarea props={descriptionProps} />
+              <div className="mt-5 pt-3 border-t border-stroke text-sm">
+                <div>
+                  Diubah Oleh :{" "}
+                  <span>{values?.activity?.updated_user?.name}</span>
+                </div>
+                <div>
+                  Diubah Pada :{" "}
+                  <span>
+                    {moment.unix(values?.activity?.updated_at / 1000).fromNow()}
+                  </span>
+                </div>
+              </div>
             </div>
-            <Upload props={uploadProps} />
-          </>
-        )}
-        <div className="mt-5 pt-3 border-t border-stroke text-sm">
-          <div>
-            Diubah Oleh : <span>{values?.updated_user?.name}</span>
-          </div>
-          <div>
-            Diubah Pada :{" "}
-            <span>{moment.unix(values.updated_at / 1000).fromNow()}</span>
-          </div>
+          </BasicCard>
         </div>
-      </LayoutForm>
-
-      {open && <DeleteModal props={deleteProps} />}
+        <div className="col-span-2">
+          <BasicCard title="Upload Bukti Absensi">
+            <div className="p-6.5">
+              {!values?.attendance_image ? (
+                <>
+                  <div className="mb-5">
+                    <UploadInput props={uploadProps} />
+                    <div className="text-xs">
+                      *Bukti kehadiran harus mencakup wajah dengan latar
+                      kegiatan saat sedang berlangsung
+                    </div>
+                  </div>
+                  <button
+                    disabled={isLoading || !file}
+                    onClick={handleSubmit}
+                    className={`${
+                      !file ? "bg-slate-300" : "bg-primary hover:bg-blue-800"
+                    }  text-white w-full py-2`}
+                  >
+                    {isLoading ? "Loading..." : "Upload"}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="flex justify-between mb-4">
+                    <div>Status:</div>
+                    <div className="text-black-2 font-medium">
+                      {values.is_accept ? "Diterima" : "Belum Diresponse"}
+                    </div>
+                  </div>
+                  <button
+                    disabled={isLoading}
+                    onClick={() => handleGetFile(values.attendance_image)}
+                    className="bg-primary hover:bg-blue-800 text-white w-full py-2"
+                  >
+                    {isLoading ? "Loading..." : "Lihat"}
+                  </button>
+                </>
+              )}
+            </div>
+          </BasicCard>
+        </div>
+      </div>
     </>
   );
 }

@@ -9,6 +9,7 @@ interface Props {
   group: number;
 }
 
+const groups = ["POKJA I", "POKJA II", "POKJA III", "POKJA IV"];
 const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 export const BlogCard = ({ props }: { props: Props }) => {
@@ -21,7 +22,7 @@ export const BlogCard = ({ props }: { props: Props }) => {
           alt={`${props?.title}`}
         />
         <p className="bottom-0 absolute m-4 px-3 py-1 bg-warning text-white rounded-full text-sm font-medium">
-          {props?.group}
+          {groups[props?.group - 1]}
         </p>
       </div>
       <div className="p-5">

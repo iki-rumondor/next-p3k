@@ -6,8 +6,6 @@ import { ProductCard } from "app/(home_partials)/product_card";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-const groups = ["POKJA I", "POKJA II", "POKJA III", "POKJA IV"];
-
 export default function page() {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<Activity[]>([]);
@@ -41,7 +39,7 @@ export default function page() {
                 title: item.title,
                 description: item.description,
                 image_name: item.image_name,
-                group: groups[item.group - 1],
+                group: item.group,
               }}
             />
           ))}

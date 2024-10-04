@@ -1,10 +1,7 @@
 "use client";
-import Input from "@/components/Forms/Input";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
 import Loader from "@/components/Loader";
-import BasicModal from "@/components/Modal/BasicModal";
 import get_data from "actions/get_data";
-import post_data from "actions/post_data";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+const groups = ["POKJA I", "POKJA II", "POKJA III", "POKJA IV"];
 
 export default function page({ params }: { params: { uuid: string } }) {
   const config = {
@@ -72,7 +70,7 @@ export default function page({ params }: { params: { uuid: string } }) {
             <div className="flex justify-between items-center mb-3">
               <div className="font-medium text-title-xl">{values?.title}</div>
               <div className="px-3 py-1 bg-primary text-white">
-                {values?.created_user?.name}
+                {groups[values?.group - 1]}
               </div>
             </div>
             <div className="mb-7">{values?.description}</div>
