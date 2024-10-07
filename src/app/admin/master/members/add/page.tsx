@@ -11,18 +11,40 @@ import toast from "react-hot-toast";
 
 const defaultValue = {
   name: "",
-  group: "",
+  is_important: true,
   position: "",
 };
 
-const groups = [
-  { value: 1, name: "POKJA I" },
-  { value: 2, name: "POKJA II" },
-  { value: 3, name: "POKJA III" },
-  { value: 4, name: "POKJA IV" },
+const positions = [
+  { name: "DEWAN PEMBINA", is_important: true },
+  { name: "PENASIHAT", is_important: true },
+  { name: "KETUA", is_important: true },
+  { name: "WAKIL KETUA", is_important: true },
+  { name: "SEKRETARIS", is_important: true },
+  { name: "WAKIL SEKRETARIS", is_important: true },
+  { name: "BENDAHARA", is_important: true },
+  { name: "WAKIL BENDAHARA", is_important: true },
+  { name: "KETUA POKJA I", is_important: true },
+  { name: "SEKRETARIS POKJA I", is_important: true },
+  { name: "ANGGOTA POKJA I", is_important: false },
+  { name: "KETUA POKJA II", is_important: true },
+  { name: "SEKRETARIS POKJA II", is_important: true },
+  { name: "ANGGOTA POKJA II", is_important: false },
+  { name: "KETUA POKJA III", is_important: true },
+  { name: "SEKRETARIS POKJA III", is_important: true },
+  { name: "ANGGOTA POKJA III", is_important: false },
+  { name: "KETUA POKJA IV", is_important: true },
+  { name: "SEKRETARIS POKJA IV", is_important: true },
+  { name: "ANGGOTA POKJA IV", is_important: false },
 ];
 
-const positions = ["KETUA", "SEKRETARIS", "BENDAHARA", "ANGGOTA"];
+const isPositionImportant = (name: string): boolean => {
+  const position = positions.find((p) => p.name === name);
+  if (!position) {
+    return false;
+  }
+  return position.is_important;
+};
 
 export default function page() {
   const config = {
@@ -40,30 +62,26 @@ export default function page() {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const groupProps = {
-    value: values.group,
-    options: groups.map((item) => {
-      return {
-        name: item.name,
-        value: item.value,
-      };
-    }),
-    name: "group",
-    label: "Pilih Kelompok Kerja",
-    handleChange: handleChange,
+  const handlePositionChange = (e: any) => {
+    const is_important = isPositionImportant(e.target.value);
+    setValues({
+      ...values,
+      position: e.target.value,
+      is_important: is_important,
+    });
   };
 
   const positionProps = {
     value: values.position,
     options: positions.map((item) => {
       return {
-        name: item,
-        value: item,
+        name: item.name,
+        value: item.name,
       };
     }),
     name: "position",
     label: "Pilih Jabatan",
-    handleChange: handleChange,
+    handleChange: handlePositionChange,
   };
 
   const nameProps = {
@@ -80,11 +98,12 @@ export default function page() {
     const token = localStorage.getItem("token") || "";
     try {
       setIsLoading(true);
-      const groupInt = parseInt(values.group);
-      const response = await post_data(token, config.submit_api, "POST", {
-        ...values,
-        group: groupInt,
-      });
+      const response = await post_data(
+        token,
+        config.submit_api,
+        "POST",
+        values
+      );
       toast.success(response.message);
       router.push(config.back_push);
     } catch (error: any) {
@@ -110,7 +129,6 @@ export default function page() {
         isLoading={isLoading}
         title={config.title_form}
       >
-        <Select props={groupProps} />
         <Select props={positionProps} />
         <Input props={nameProps} />
       </LayoutForm>

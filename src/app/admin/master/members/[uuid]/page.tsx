@@ -13,6 +13,37 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+const positions = [
+  { name: "DEWAN PEMBINA", is_important: true },
+  { name: "PENASIHAT", is_important: true },
+  { name: "KETUA", is_important: true },
+  { name: "WAKIL KETUA", is_important: true },
+  { name: "SEKRETARIS", is_important: true },
+  { name: "WAKIL SEKRETARIS", is_important: true },
+  { name: "BENDAHARA", is_important: true },
+  { name: "WAKIL BENDAHARA", is_important: true },
+  { name: "KETUA POKJA I", is_important: true },
+  { name: "SEKRETARIS POKJA I", is_important: true },
+  { name: "ANGGOTA POKJA I", is_important: false },
+  { name: "KETUA POKJA II", is_important: true },
+  { name: "SEKRETARIS POKJA II", is_important: true },
+  { name: "ANGGOTA POKJA II", is_important: false },
+  { name: "KETUA POKJA III", is_important: true },
+  { name: "SEKRETARIS POKJA III", is_important: true },
+  { name: "ANGGOTA POKJA III", is_important: false },
+  { name: "KETUA POKJA IV", is_important: true },
+  { name: "SEKRETARIS POKJA IV", is_important: true },
+  { name: "ANGGOTA POKJA IV", is_important: false },
+];
+
+const isPositionImportant = (name: string): boolean => {
+  const position = positions.find((p) => p.name === name);
+  if (!position) {
+    return false;
+  }
+  return position.is_important;
+};
+
 export default function page({ params }: { params: { uuid: string } }) {
   const config = {
     back_url: "../members",
@@ -22,14 +53,6 @@ export default function page({ params }: { params: { uuid: string } }) {
     delete_message: "Apakah anda yakin akan menghapus masyarakat tersebut?",
   };
 
-  const groups = [
-    { value: 1, name: "POKJA I" },
-    { value: 2, name: "POKJA II" },
-    { value: 3, name: "POKJA III" },
-    { value: 4, name: "POKJA IV" },
-  ];
-
-  const positions = ["KETUA", "SEKRETARIS", "BENDAHARA", "ANGGOTA"];
 
   const [open, setOpen] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
@@ -41,30 +64,27 @@ export default function page({ params }: { params: { uuid: string } }) {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const groupProps = {
-    value: values.group,
-    options: groups.map((item) => {
-      return {
-        name: item.name,
-        value: item.value,
-      };
-    }),
-    name: "group",
-    label: "Pilih Kelompok Kerja",
-    handleChange: handleChange,
+  const handlePositionChange = (e: any) => {
+    const is_important = isPositionImportant(e.target.value);
+    setValues({
+      ...values,
+      position: e.target.value,
+      is_important: is_important,
+    });
   };
+
 
   const positionProps = {
     value: values.position,
     options: positions.map((item) => {
       return {
-        name: item,
-        value: item,
+        name: item.name,
+        value: item.name,
       };
     }),
     name: "position",
     label: "Pilih Jabatan",
-    handleChange: handleChange,
+    handleChange: handlePositionChange,
   };
 
   const nameProps = {
@@ -170,7 +190,6 @@ export default function page({ params }: { params: { uuid: string } }) {
         isLoading={isLoading}
         title={config.title_form}
       >
-        <Select props={groupProps} />
         <Select props={positionProps} />
         <Input props={nameProps} />
       </LayoutForm>
