@@ -14,11 +14,13 @@ import { Member } from "@/types/member";
 import get_data from "actions/get_data";
 import post_data from "actions/post_data";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { getUserUuid } from "utils/jwt";
 
 const groups = [
   { value: 1, name: "POKJA I (PENGHAYATAN DAN PENGALAMAN PANCASILA)" },
@@ -30,10 +32,11 @@ const groups = [
   },
 ];
 
-const defaultData = {
-  longitude: "",
-  latitude: "",
-};
+interface TokenPayload {
+  uuid: string;
+  role: string;
+  exp: number;
+}
 
 export default function page({ params }: { params: { uuid: string } }) {
   const config = {
@@ -47,7 +50,6 @@ export default function page({ params }: { params: { uuid: string } }) {
   const [file, setFile] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [data, setData] = useState(defaultData);
 
   const router = useRouter();
 
@@ -61,7 +63,7 @@ export default function page({ params }: { params: { uuid: string } }) {
 
   const groupProps = {
     disabled: true,
-    value: values?.activity?.group,
+    value: values?.group,
     options: groups.map((item) => {
       return {
         name: item.name,
@@ -80,7 +82,7 @@ export default function page({ params }: { params: { uuid: string } }) {
     placeholder: "Masukkan Judul Kegiatan",
     name: "title",
     type: "text",
-    value: values?.activity?.title,
+    value: values?.title,
   };
 
   const descriptionProps = {
@@ -89,7 +91,7 @@ export default function page({ params }: { params: { uuid: string } }) {
     label: "Deskripsi Kegiatan",
     placeholder: "Masukkan Deskripsi Kegiatan",
     name: "description",
-    value: values.activity?.description,
+    value: values.description,
     rows: 7,
   };
 
@@ -100,9 +102,15 @@ export default function page({ params }: { params: { uuid: string } }) {
 
   const handleLoad = async () => {
     const token = localStorage.getItem("token") || "";
+    const uuid = getUserUuid(token);
     try {
       setIsLoading(true);
-      const resp = await get_data(token, `/members/activities/${params.uuid}`);
+      const resp = await get_data(
+        token,
+        `/activities/${params.uuid}?member=${uuid}`
+      );
+      console.log(resp);
+
       setValues(resp.data);
     } catch (error: any) {
       toast.error(error.message);
@@ -194,13 +202,12 @@ export default function page({ params }: { params: { uuid: string } }) {
               <Textarea props={descriptionProps} />
               <div className="mt-5 pt-3 border-t border-stroke text-sm">
                 <div>
-                  Diubah Oleh :{" "}
-                  <span>{values?.activity?.updated_user?.name}</span>
+                  Diubah Oleh : <span>{values?.updated_user?.name}</span>
                 </div>
                 <div>
                   Diubah Pada :{" "}
                   <span>
-                    {moment.unix(values?.activity?.updated_at / 1000).fromNow()}
+                    {moment.unix(values?.updated_at / 1000).fromNow()}
                   </span>
                 </div>
               </div>
@@ -210,7 +217,7 @@ export default function page({ params }: { params: { uuid: string } }) {
         <div className="col-span-2">
           <BasicCard title="Upload Bukti Absensi">
             <div className="p-6.5">
-              {!values?.attendance_image ? (
+              {!values?.member_activity?.attendance_image ? (
                 <>
                   <div className="mb-5">
                     <UploadInput props={uploadProps} />
@@ -234,12 +241,16 @@ export default function page({ params }: { params: { uuid: string } }) {
                   <div className="flex justify-between mb-4">
                     <div>Status:</div>
                     <div className="text-black-2 font-medium">
-                      {values.is_accept ? "Diterima" : "Belum Diresponse"}
+                      {values?.member_activity?.is_accept
+                        ? "Diterima"
+                        : "Belum Diresponse"}
                     </div>
                   </div>
                   <button
                     disabled={isLoading}
-                    onClick={() => handleGetFile(values.attendance_image)}
+                    onClick={() =>
+                      handleGetFile(values?.member_activity?.attendance_image)
+                    }
                     className="bg-primary hover:bg-blue-800 text-white w-full py-2"
                   >
                     {isLoading ? "Loading..." : "Lihat"}

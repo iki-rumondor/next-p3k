@@ -40,6 +40,14 @@ const menuGroups = [
         label: "Kegiatan PKK",
         route: "/admin/activities",
       },
+      {
+        icon: <ClipboardIcon />,
+        label: "Laporan",
+        route: "#",
+        children: [
+          { label: "Akun Marketplace", route: "/admin/reports/accounts" },
+        ],
+      },
     ],
   },
 ];
