@@ -1,5 +1,4 @@
 import axios from "axios";
-import { redirect } from "next/navigation";
 const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 export default async function get_data(token: string, endpoint: string) {
