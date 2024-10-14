@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import DashboardIcon from "@/components/Icons/DashboardIcon";
 import ListIcon from "@/components/Icons/ListIcon";
+import ClipboardIcon from "../Icons/ClipboardIcon";
 
 const menuGroups = [
   {
@@ -18,14 +19,20 @@ const menuGroups = [
         icon: <ListIcon />,
         label: "Master",
         route: "#",
-        children: [
-          { label: "Produk", route: "/umkm/master/products" },
-        ],
+        children: [{ label: "Produk", route: "/umkm/master/products" }],
       },
       {
         icon: <DashboardIcon />,
         label: "Transaksi Produk",
         route: "/umkm/transactions",
+      },
+      {
+        icon: <ClipboardIcon />,
+        label: "Laporan",
+        route: "#",
+        children: [
+          { label: "Transaksi", route: "/reports/transactions", blank: true },
+        ],
       },
     ],
   },

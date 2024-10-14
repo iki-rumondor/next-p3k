@@ -78,8 +78,6 @@ export default function Page() {
     try {
       setIsLoading(true);
       const response = await get_data(token, "/dashboard/shop");
-      console.log(response);
-
       response.data && setData(response.data);
     } catch (error: any) {
       toast.error(error.message);

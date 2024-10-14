@@ -100,14 +100,6 @@ export default function page({ params }: { params: { uuid: string } }) {
     handleChange: handleChangeFile,
   };
 
-  const memberProps = {
-    value: memberSelect,
-    options: options,
-    name: "member",
-    label: "Pilih Anggota PKK",
-    handleChange: (e: any) => setSelectMember(e.target.value),
-  };
-
   const handleLoad = async () => {
     const token = localStorage.getItem("token") || "";
     try {
@@ -136,39 +128,6 @@ export default function page({ params }: { params: { uuid: string } }) {
     } finally {
       setIsCheck(true);
       setIsLoading(false);
-    }
-  };
-
-  const handleAddMember = async () => {
-    const token = localStorage.getItem("token") || "";
-    try {
-      setReload(false);
-      setLoadingAdd(true);
-      await post_data(token, "/members/activities", "POST", {
-        activity_uuid: params.uuid,
-        member_uuid: memberSelect,
-      });
-      setReload(true);
-      setSelectMember("");
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setLoadingAdd(false);
-    }
-  };
-
-  const handleDeleteMember = async (uuid: string) => {
-    const token = localStorage.getItem("token") || "";
-    try {
-      setReload(false);
-      await post_data(
-        token,
-        `/members/${uuid}/activities/${params.uuid}`,
-        "DELETE"
-      );
-      setReload(true);
-    } catch (error: any) {
-      toast.error(error.message);
     }
   };
 
@@ -249,78 +208,46 @@ export default function page({ params }: { params: { uuid: string } }) {
           Hapus
         </button>
       </div>
-      <div className="grid md:grid-cols-5 md:gap-4">
-        <div className="col-span-3">
-          <LayoutForm
-            handleSubmit={handleSubmit}
-            isLoading={isLoading}
-            title={config.title_form}
-          >
-            <Select props={groupProps} />
-            <Input props={titleProps} />
-            <Textarea props={descriptionProps} />
-            {file ? (
-              <div className="mb-4.5">
-                <p>Nama File : {file.name}</p>
-                <p>Ukuran : {convertToMB(file.size)}</p>
-                <button
-                  onClick={() => setFile(null)}
-                  className="inline-flex items-center justify-center gap-1.5 font-small bg-rose-500 text-white px-2 py-1 rounded-md mt-2 hover:bg-rose-600"
-                >
-                  <span>
-                    <DeleteIcon />
-                  </span>
-                  Hapus
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Pilih Gambar Kegiatan
-                </div>
-                <Upload props={uploadProps} />
-              </>
-            )}
-            <div className="mt-5 pt-3 border-t border-stroke text-sm">
-              <div>
-                Diubah Oleh : <span>{values?.updated_user?.name}</span>
-              </div>
-              <div>
-                Diubah Pada :{" "}
-                <span>{moment.unix(values.updated_at / 1000).fromNow()}</span>
-              </div>
+      <LayoutForm
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+        title={config.title_form}
+      >
+        <Select props={groupProps} />
+        <Input props={titleProps} />
+        <Textarea props={descriptionProps} />
+        {file ? (
+          <div className="mb-4.5">
+            <p>Nama File : {file.name}</p>
+            <p>Ukuran : {convertToMB(file.size)}</p>
+            <button
+              onClick={() => setFile(null)}
+              className="inline-flex items-center justify-center gap-1.5 font-small bg-rose-500 text-white px-2 py-1 rounded-md mt-2 hover:bg-rose-600"
+            >
+              <span>
+                <DeleteIcon />
+              </span>
+              Hapus
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="mb-3 block text-sm font-medium text-black dark:text-white">
+              Pilih Gambar Kegiatan
             </div>
-          </LayoutForm>
+            <Upload props={uploadProps} />
+          </>
+        )}
+        <div className="mt-5 pt-3 border-t border-stroke text-sm">
+          <div>
+            Diubah Oleh : <span>{values?.updated_user?.name}</span>
+          </div>
+          <div>
+            Diubah Pada :{" "}
+            <span>{moment.unix(values.updated_at / 1000).fromNow()}</span>
+          </div>
         </div>
-        <div className="col-span-2">
-          <BasicCard title="Input Absensi">
-            <div className="p-6.5">
-              {values.members.length > 0 &&
-                values.members.map((item: any) => (
-                  <div className="mb-5 pb-3 text-sm border-b border-stroke">
-                    <div className="grid grid-cols-5 items-center gap-2">
-                      <div className="col-span-4">{item.name}</div>
-                      <button
-                        onClick={() => handleDeleteMember(item.uuid)}
-                        className="col-span-1 text-right text-danger hover:text-red font-medium"
-                      >
-                        HAPUS
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              <Select props={memberProps} />
-              <button
-                disabled={loadingAdd || memberSelect == ""}
-                onClick={handleAddMember}
-                className="bg-primary hover:bg-blue-800 text-white w-full py-2"
-              >
-                {loadingAdd ? "Loading..." : "Tambahkan"}
-              </button>
-            </div>
-          </BasicCard>
-        </div>
-      </div>
+      </LayoutForm>
 
       {open && <DeleteModal props={deleteProps} />}
     </>

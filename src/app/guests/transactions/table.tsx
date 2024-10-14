@@ -9,12 +9,14 @@ interface TableProps {
   data: ProductTransaction[];
   handleOpen: (id: string) => void;
   handleOpenUpload: (id: string) => void;
+  handleOpenFile: (filename: string) => void;
 }
 
 const MainTable: React.FC<TableProps> = ({
   data,
   handleOpen,
   handleOpenUpload,
+  handleOpenFile,
 }) => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -39,6 +41,9 @@ const MainTable: React.FC<TableProps> = ({
                 </th>
                 <th className=" px-4 py-4 font-medium text-black dark:text-white">
                   Status
+                </th>
+                <th className=" px-4 py-4 font-medium text-black dark:text-white">
+                  Bukti Pembayaran
                 </th>
                 <th className="px-4 py-4 font-medium text-black dark:text-white">
                   Aksi
@@ -65,7 +70,7 @@ const MainTable: React.FC<TableProps> = ({
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p
-                      className={`bg-primary inline-block px-2 py-1 text-sm text-white rounded-full ${
+                      className={` inline-block px-2 py-1 text-sm text-white rounded-full ${
                         item.is_response
                           ? item.is_accept
                             ? "bg-success"
@@ -79,6 +84,18 @@ const MainTable: React.FC<TableProps> = ({
                           : "Ditolak"
                         : "Belum Diproses"}
                     </p>
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                    {item.proof_file ? (
+                      <button
+                        onClick={() => handleOpenFile(item.proof_file)}
+                        className="bg-primary text-white px-3 py-1 text-sm rounded-full"
+                      >
+                        Lihat
+                      </button>
+                    ) : (
+                      <div>-</div>
+                    )}
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <div className="flex gap-1">

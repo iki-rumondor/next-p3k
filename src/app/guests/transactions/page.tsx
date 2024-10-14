@@ -8,6 +8,7 @@ import DeleteModal from "@/components/Modal/DeleteModal";
 import post_data from "actions/post_data";
 import BasicModal from "@/components/Modal/BasicModal";
 import UploadInput from "@/components/Forms/UploadInput";
+import axios from "axios";
 
 export default function page() {
   const config = {
@@ -81,6 +82,36 @@ export default function page() {
     }
   };
 
+  const handleGetFile = async (filename: string) => {
+    if (!filename) {
+      toast.error("Filename tidak ditemukan");
+      return;
+    }
+
+    const accessToken = localStorage.getItem("token");
+    const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+    try {
+      setIsLoading(true);
+      const response = await axios({
+        method: "GET",
+        url: `${baseAPIUrl}/files/transaction_proofs/${filename}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        responseType: "blob",
+      });
+      const url = window.URL.createObjectURL(response.data);
+      window.open(url, "_blank");
+    } catch (error: any) {
+      const message = error?.response?.data?.message
+        ? error.response.data.message
+        : error.message;
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleDelete = async () => {
     const token = localStorage.getItem("token") || "";
     try {
@@ -121,6 +152,7 @@ export default function page() {
         data={data}
         handleOpen={handleSelect}
         handleOpenUpload={handleUpload}
+        handleOpenFile={handleGetFile}
       />
       {open && <DeleteModal props={deleteProps} />}
       {openUpload && (
