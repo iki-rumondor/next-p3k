@@ -96,14 +96,14 @@ export default function Page() {
       {data && (
         <div className="grid grid-cols-2 gap-3">
           <DashboardCard
-            link="/umkm/master/products"
+            link="/guests/transactions"
             color="green"
             title="Transaksi Berhasil"
             body={`${data.success_transactions}`}
             icon={<SolidCheckBadge className="text-white size-9" />}
           />
           <DashboardCard
-            link="/umkm/master/products"
+            link="/guests/transactions"
             color="yellow"
             title="Transaksi Belum Diproses"
             body={`${data.unprocess_transactions}`}

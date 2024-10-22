@@ -15,7 +15,6 @@ export default function HomeHeader({
       <div>Icon</div>
       <div className="gap-6 items-center md:flex hidden">
         <Link href={"/"}>Beranda</Link>
-        <Link href={"/about"}>Tentang</Link>
         <Link href={"/activities"}>Kegiatan PKK</Link>
         <Link href={"/products"}>Produk UMKM</Link>
         {isLogin ? (

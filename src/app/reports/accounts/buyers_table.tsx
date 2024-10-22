@@ -41,7 +41,7 @@ const BuyersTable: React.FC<TableProps> = ({ data }) => {
             </td>
             <td className="border px-2 py-1">
               <p className="text-black">
-                {moment.unix(item.created_at / 1000).fromNow()}
+                {moment.unix(item.created_at / 1000).format("D-M-yyyy")}
               </p>
             </td>
           </tr>

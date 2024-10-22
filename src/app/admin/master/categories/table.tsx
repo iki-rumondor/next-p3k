@@ -14,7 +14,7 @@ const MainTable: React.FC<TableProps> = ({ data }) => {
       <div className="max-w-full overflow-x-auto">
         <div className="border-b border-stroke pb-4 dark:border-strokedark mb-4">
           <h3 className="font-medium text-black dark:text-white">
-            Master Kategori UMKM
+            Master Kategori Produk UMKM
           </h3>
         </div>
         {data.length > 0 && (

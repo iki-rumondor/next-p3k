@@ -1,17 +1,17 @@
 "use client";
-import { ProductTransaction } from "@/types/product_transaction";
+import { Activity } from "@/types/activity";
 import get_data from "actions/get_data";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-export default function TransactionsReportTable() {
-  const [data, setData] = useState<ProductTransaction[]>([]);
+export default function ActivityTable() {
+  const [data, setData] = useState<Activity[]>([]);
 
   const handleLoad = async () => {
     const token = localStorage.getItem("token") || "";
     try {
-      const resp = await get_data(token, "/shops/transactions?is_accept=true");
+      const resp = await get_data(token, "/activities");
       setData(resp.data);
     } catch (error: any) {
       toast.error(error.message);
@@ -26,16 +26,16 @@ export default function TransactionsReportTable() {
     <table className="w-full table-auto">
       <thead>
         <tr className="text-left">
-          <th className="border px-2 py-1 font-medium text-black">Produk</th>
-          <th className="border px-2 py-1 font-medium text-black">Pembeli</th>
+          <th className="border px-2 py-1 font-medium text-black">Judul</th>
+          <th className="border px-2 py-1 font-medium text-black">Deskripsi</th>
           <th className="border px-2 py-1 font-medium text-black">
-            Jumlah Dibeli
+            Kelompok Kerja
           </th>
           <th className="border px-2 py-1 font-medium text-black">
-            Pendapatan
+            Dibuat Oleh
           </th>
           <th className="border px-2 py-1 font-medium text-black">
-            Tanggal Pembelian
+            Dibuat pada
           </th>
         </tr>
       </thead>
@@ -44,16 +44,16 @@ export default function TransactionsReportTable() {
           data.map((item, key) => (
             <tr key={key}>
               <td className="border px-2 py-1">
-                <p className="text-black">{item.product.name}</p>
+                <p className="text-black">{item.title}</p>
               </td>
               <td className="border px-2 py-1">
-                <p className="text-black">{item.user.name}</p>
+                <p className="text-black">{item.description}</p>
               </td>
               <td className="border px-2 py-1">
-                <p className="text-black">{item.quantity}</p>
+                <p className="text-black">{item.group}</p>
               </td>
               <td className="border px-2 py-1">
-                <p className="text-black">{item.revenue}</p>
+                <p className="text-black">{item.created_user.name}</p>
               </td>
               <td className="border px-2 py-1">
                 <p className="text-black">

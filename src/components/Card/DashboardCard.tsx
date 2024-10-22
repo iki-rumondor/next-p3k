@@ -4,8 +4,9 @@ import Link from "next/link";
 interface Props {
   title: string;
   body: string;
+  size?: string;
   color?: string;
-  link: string;
+  link?: string;
   icon: React.ReactNode;
 }
 
@@ -14,6 +15,7 @@ export default function DashboardCard({
   body,
   color,
   link,
+  size = "text-title-xxl2",
   icon,
 }: Props) {
   const classColor = {
@@ -48,29 +50,31 @@ export default function DashboardCard({
       <div className="flex-1 flex flex-col gap-3">
         <div>
           <h5 className="font-medium">{title}</h5>
-          <p className="text-black-2 text-title-xxl2 font-medium">{body}</p>
+          <p className={`${size} text-black-2 font-medium`}>{body}</p>
         </div>
       </div>
-      <Link
-        href={`${link}`}
-        className={`${classColor.text} flex items-center font-bold`}
-      >
-        Lihat
-        <svg
-          className="w-4 h-4 ml-2"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+      {link && (
+        <Link
+          href={`${link}`}
+          className={`${classColor.text} flex items-center font-bold`}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M14 5l7 7m0 0l-7 7m7-7H3"
-          ></path>
-        </svg>
-      </Link>
+          Lihat
+          <svg
+            className="w-4 h-4 ml-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M14 5l7 7m0 0l-7 7m7-7H3"
+            ></path>
+          </svg>
+        </Link>
+      )}
     </div>
   );
 }

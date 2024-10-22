@@ -50,9 +50,8 @@ export default function page({ params }: { params: { uuid: string } }) {
     back_push: "/admin/master/members",
     default_api: `/members/${params.uuid}`,
     title_form: "Update Data Anggota",
-    delete_message: "Apakah anda yakin akan menghapus masyarakat tersebut?",
+    delete_message: "Apakah anda yakin akan menghapus anggota tersebut?",
   };
-
 
   const [open, setOpen] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
@@ -72,7 +71,6 @@ export default function page({ params }: { params: { uuid: string } }) {
       is_important: is_important,
     });
   };
-
 
   const positionProps = {
     value: values.position,
@@ -138,7 +136,11 @@ export default function page({ params }: { params: { uuid: string } }) {
     const token = localStorage.getItem("token") || "";
     try {
       setIsLoading(true);
-      const response = await post_data(token, config.default_api, "DELETE");
+      const response = await post_data(
+        token,
+        `/master/members/${params.uuid}`,
+        "DELETE"
+      );
       toast.success(response.message);
       router.push(config.back_push);
     } catch (error: any) {

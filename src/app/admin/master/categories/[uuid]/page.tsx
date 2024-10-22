@@ -21,7 +21,7 @@ export default function page({ params }: { params: { uuid: string } }) {
     back_url: "../categories",
     back_push: "/admin/master/categories",
     default_api: `/categories/${params.uuid}`,
-    title_form: "Update Kategori UMKM",
+    title_form: "Update Kategori Produk UMKM",
   };
 
   const [open, setOpen] = useState(false);
@@ -92,7 +92,7 @@ export default function page({ params }: { params: { uuid: string } }) {
   };
 
   const deleteProps = {
-    title: "Setelah menghapus kategori tersebut, seluruh umkm dengan kategori tersebut akan dihapus juga",
+    title: "Setelah menghapus kategori tersebut, seluruh produk UMKM dengan kategori tersebut akan dihapus juga",
     toggleModal: () => setOpen(!open),
     handleSubmit: handleDelete,
     isLoading: isLoading,

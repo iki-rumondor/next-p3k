@@ -109,8 +109,6 @@ export default function page({ params }: { params: { uuid: string } }) {
         token,
         `/activities/${params.uuid}?member=${uuid}`
       );
-      console.log(resp);
-
       setValues(resp.data);
     } catch (error: any) {
       toast.error(error.message);
@@ -240,11 +238,7 @@ export default function page({ params }: { params: { uuid: string } }) {
                 <>
                   <div className="flex justify-between mb-4">
                     <div>Status:</div>
-                    <div className="text-black-2 font-medium">
-                      {values?.member_activity?.is_accept
-                        ? "Diterima"
-                        : "Belum Diresponse"}
-                    </div>
+                    <div className="text-black-2 font-medium">HADIR</div>
                   </div>
                   <button
                     disabled={isLoading}

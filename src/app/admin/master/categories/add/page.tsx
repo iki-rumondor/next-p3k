@@ -12,7 +12,7 @@ const config = {
   back_url: "../categories",
   back_push: "/admin/master/categories",
   submit_api: "/categories",
-  title_form: "Tambah Kategori UMKM",
+  title_form: "Tambah Kategori Produk UMKM",
 };
 
 const defaultValue = {

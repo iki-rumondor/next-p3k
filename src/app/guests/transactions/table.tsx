@@ -114,14 +114,16 @@ const MainTable: React.FC<TableProps> = ({
                           <div>|</div>
                         </>
                       )}
-                      <div className="flex items-center space-x-3.5">
-                        <button
-                          onClick={() => handleOpen(item.uuid)}
-                          className="hover:text-danger"
-                        >
-                          <DeleteIcon />
-                        </button>
-                      </div>
+                      {!item.is_accept && (
+                        <div className="flex items-center space-x-3.5">
+                          <button
+                            onClick={() => handleOpen(item.uuid)}
+                            className="hover:text-danger"
+                          >
+                            <DeleteIcon />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </td>
                 </tr>

@@ -1,12 +1,10 @@
 "use client";
 import Input from "@/components/Forms/Input";
 import LayoutForm from "@/components/Forms/Layout";
-import Select from "@/components/Forms/Select";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
 import DeleteIcon from "@/components/Icons/DeleteIcon";
 import Loader from "@/components/Loader";
 import DeleteModal from "@/components/Modal/DeleteModal";
-import { Category } from "@/types/category";
 import get_data from "actions/get_data";
 import post_data from "actions/post_data";
 import Link from "next/link";

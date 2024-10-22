@@ -8,6 +8,7 @@ import { Product } from "@/types/product";
 import { Activity } from "@/types/activity";
 import get_data from "actions/get_data";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -52,12 +53,13 @@ export default function Home() {
         <div className="relative flex-grow bg-homepage bg-no-repeat bg-cover bg-center h-full flex justify-center items-center text-white">
           <div className="absolute inset-0 bg-black opacity-50"></div>
           <div className="flex flex-col text-center gap-2 z-10">
-            <div className="text-title-xxl2 font-bold">
-              Selamat Datang Di Website Resmi P3K Bone Bolango
+            <div className="text-title-xxl2 font-bold w-2/3 m-auto">
+              Selamat Datang di Web Portal Kegiatan Dasawisma dan PKK Desa
+              Tingkohubu
             </div>
             <div className="text-lg font-medium w-2/3 m-auto">
-              Media informasi untuk masyarakat bone bolango dalam mengetahui
-              arsip lengkap dan jual beli produk umkm{" "}
+              Media informasi Kegiatan Dasawisma dan PKK dan jual beli produk
+              UMKM Desa Tingkohubu
             </div>
             {/* <div>
               <Link
@@ -70,6 +72,41 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <section className="p-10 mt-10">
+        <div className="text-center text-title-xl2 font-medium text-black mb-10">
+          Tentang
+        </div>
+        <div className="grid grid-cols-2 gap-1 items-center">
+          <div>
+            <Image
+              src={"/images/test-img.jpeg"}
+              alt="about-image"
+              width={500}
+              height={1}
+            />
+          </div>
+          <div className="flex flex-col gap-3">
+            <div>
+              <div className="font-semibold text-lg">Visi</div>
+              <div>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil
+                ea blanditiis recusandae, eaque fuga id dolorem dignissimos
+                tempore ratione earum, doloremque repellendus dolores laborum
+                optio ipsam fugiat. Aliquid, est nostrum!
+              </div>
+            </div>
+            <div>
+              <div className="font-semibold text-lg">Misi</div>
+              <div>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil
+                ea blanditiis recusandae, eaque fuga id dolorem dignissimos
+                tempore ratione earum, doloremque repellendus dolores laborum
+                optio ipsam fugiat. Aliquid, est nostrum!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="p-10 mt-10">
         <div className="text-center text-title-xl2 font-medium text-black mb-10">
           Produk UMKM
