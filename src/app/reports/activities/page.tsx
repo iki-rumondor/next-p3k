@@ -1,7 +1,7 @@
 import React from "react";
-import TransactionsReportTable from "./_internal/table";
 import moment from "moment";
 import PrintButton from "./_internal/print_button";
+import ActivityTable from "./_internal/table";
 
 export default function Page() {
   return (
@@ -9,7 +9,7 @@ export default function Page() {
       <div className="font-semibold text-title-lg mb-3 text-black-2">
         Laporan Kegiatan
       </div>
-      <TransactionsReportTable />
+      <ActivityTable />
       <div className="my-3 flex justify-between">
         <div>Dicetak tanggal: {moment().format("DD/MM/YYYY")}</div>
       </div>

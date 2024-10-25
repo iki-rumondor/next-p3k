@@ -28,7 +28,7 @@ export default function page() {
       <div className="mb-5">
         <div className="text-center mt-2">
           Sudah punya akun? silahkan{" "}
-          <Link href="/auth/login" className="text-primary hover:text-blue-800">
+          <Link href="/auth/login" className="text-green-600 hover:text-green-800">
             masuk
           </Link>{" "}
           ke sistem

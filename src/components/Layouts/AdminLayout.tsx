@@ -46,7 +46,6 @@ const menuGroups = [
         route: "#",
         children: [
           { label: "Akun Marketplace", route: "/admin/reports/accounts" },
-          { label: "Kegiatan", route: "/admin/reports/activities" },
         ],
       },
     ],

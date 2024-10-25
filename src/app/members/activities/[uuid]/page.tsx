@@ -238,7 +238,11 @@ export default function page({ params }: { params: { uuid: string } }) {
                 <>
                   <div className="flex justify-between mb-4">
                     <div>Status:</div>
-                    <div className="text-black-2 font-medium">HADIR</div>
+                    <div className="text-black-2 font-medium">
+                      {values?.member_activity?.is_accept
+                        ? "Disetujui"
+                        : "Belum Disetujui"}
+                    </div>
                   </div>
                   <button
                     disabled={isLoading}

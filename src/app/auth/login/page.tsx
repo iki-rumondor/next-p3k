@@ -66,7 +66,7 @@ export default function page() {
         <div className="mb-5">
           <button
             disabled={isLoading && true}
-            className={`w-full rounded-lg border border-primary bg-primary p-4 text-white transition ${
+            className={`w-full rounded-lg border border-green-600 bg-green-600 p-4 text-white transition ${
               !isLoading && "hover:bg-opacity-90"
             }`}
             type="submit"
@@ -77,7 +77,7 @@ export default function page() {
             Belum punya akun? silahkan{" "}
             <Link
               href="/auth/signup"
-              className="text-primary hover:text-blue-800"
+              className="text-green-600 hover:text-green-800"
             >
               mendaftar
             </Link>{" "}

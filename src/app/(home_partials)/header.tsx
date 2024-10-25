@@ -1,5 +1,6 @@
 import ListIcon from "@/components/Icons/ListIcon";
 import LogoutIcon from "@/components/Icons/LogoutIcon";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -12,7 +13,12 @@ export default function HomeHeader({
 }) {
   return (
     <div className="flex items-center justify-between w-full bg-black text-white font-medium text-md py-4 px-10">
-      <div>Icon</div>
+      <Image
+        src={"/images/logo/light-logo.png"}
+        alt="Logo"
+        width={150}
+        height={1}
+      />
       <div className="gap-6 items-center md:flex hidden">
         <Link href={"/"}>Beranda</Link>
         <Link href={"/activities"}>Kegiatan PKK</Link>

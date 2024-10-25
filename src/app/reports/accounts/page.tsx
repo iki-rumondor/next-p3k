@@ -39,7 +39,7 @@ export default function page() {
   return (
     <div className="bg-white p-3 min-h-screen">
       <div className="font-semibold text-title-lg mb-3 text-black-2">
-        Laporan Akun Penjual
+        Laporan Akun
       </div>
       {filter == "shops" ? (
         <ShopsTable data={umkm} />
@@ -48,7 +48,6 @@ export default function page() {
       )}
       <div className="my-3 flex justify-between">
         <div>Dicetak tanggal: {moment().format("DD/MM/YYYY")}</div>
-        <div>Dicetak oleh: Administrator</div>
       </div>
       <button
         onClick={() => window.print()}

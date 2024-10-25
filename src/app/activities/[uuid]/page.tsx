@@ -85,9 +85,13 @@ export default function page({ params }: { params: { uuid: string } }) {
                 <div className="mb-2 pb-1 text-sm border-b border-stroke">
                   <div className="flex justify-between items-center gap-2">
                     <div className="col-span-4">{item.name}</div>
-                    <div className="col-span-1 text-right text-black-2 font-medium">
-                      {item?.group}
-                    </div>
+                    <Link
+                      target="_blank"
+                      className="text-end text-primary font-medium"
+                      href={`${baseAPIUrl}/files/attendances/${item.attendance_image}`}
+                    >
+                      Lihat
+                    </Link>
                   </div>
                 </div>
               ))}

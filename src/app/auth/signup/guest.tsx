@@ -117,7 +117,7 @@ export default function GuestForm() {
 
       <button
         disabled={(isLoading && true) || confirmMassage != ""}
-        className={`w-full rounded-lg border border-primary bg-primary p-4 text-white transition ${
+        className={`w-full rounded-lg border border-green-600 bg-green-600 p-4 text-white transition ${
           !isLoading && "hover:bg-opacity-90"
         }`}
         type="submit"
