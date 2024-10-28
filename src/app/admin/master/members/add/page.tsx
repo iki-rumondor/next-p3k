@@ -11,31 +11,32 @@ import toast from "react-hot-toast";
 
 const defaultValue = {
   name: "",
-  is_important: true,
+  is_important: false,
+  is_headgroup: false,
   position: "",
 };
 
 const positions = [
-  { name: "KETUA", is_important: true },
-  { name: "WAKIL KETUA", is_important: true },
-  { name: "DEWAN PEMBINA", is_important: false },
-  { name: "PENASIHAT", is_important: false },
-  { name: "SEKRETARIS", is_important: false },
-  { name: "WAKIL SEKRETARIS", is_important: false },
-  { name: "BENDAHARA", is_important: false },
-  { name: "WAKIL BENDAHARA", is_important: false },
-  { name: "KETUA POKJA I", is_important: false },
-  { name: "SEKRETARIS POKJA I", is_important: false },
-  { name: "ANGGOTA POKJA I", is_important: false },
-  { name: "KETUA POKJA II", is_important: false },
-  { name: "SEKRETARIS POKJA II", is_important: false },
-  { name: "ANGGOTA POKJA II", is_important: false },
-  { name: "KETUA POKJA III", is_important: false },
-  { name: "SEKRETARIS POKJA III", is_important: false },
-  { name: "ANGGOTA POKJA III", is_important: false },
-  { name: "KETUA POKJA IV", is_important: false },
-  { name: "SEKRETARIS POKJA IV", is_important: false },
-  { name: "ANGGOTA POKJA IV", is_important: false },
+  { name: "KETUA", is_important: true, is_headgroup: false },
+  { name: "WAKIL KETUA", is_important: true, is_headgroup: false },
+  { name: "DEWAN PEMBINA", is_important: false, is_headgroup: false },
+  { name: "PENASIHAT", is_important: false, is_headgroup: false },
+  { name: "SEKRETARIS", is_important: false, is_headgroup: false },
+  { name: "WAKIL SEKRETARIS", is_important: false, is_headgroup: false },
+  { name: "BENDAHARA", is_important: false, is_headgroup: false },
+  { name: "WAKIL BENDAHARA", is_important: false, is_headgroup: false },
+  { name: "KETUA POKJA I", is_important: false, is_headgroup: true },
+  { name: "SEKRETARIS POKJA I", is_important: false, is_headgroup: false },
+  { name: "ANGGOTA POKJA I", is_important: false, is_headgroup: false },
+  { name: "KETUA POKJA II", is_important: false, is_headgroup: true },
+  { name: "SEKRETARIS POKJA II", is_important: false, is_headgroup: false },
+  { name: "ANGGOTA POKJA II", is_important: false, is_headgroup: false },
+  { name: "KETUA POKJA III", is_important: false, is_headgroup: true },
+  { name: "SEKRETARIS POKJA III", is_important: false, is_headgroup: false },
+  { name: "ANGGOTA POKJA III", is_important: false, is_headgroup: false },
+  { name: "KETUA POKJA IV", is_important: false, is_headgroup: true },
+  { name: "SEKRETARIS POKJA IV", is_important: false, is_headgroup: false },
+  { name: "ANGGOTA POKJA IV", is_important: false, is_headgroup: false },
 ];
 
 const isPositionImportant = (name: string): boolean => {
@@ -44,6 +45,14 @@ const isPositionImportant = (name: string): boolean => {
     return false;
   }
   return position.is_important;
+};
+
+const isPositionHeadgroup = (name: string): boolean => {
+  const position = positions.find((p) => p.name === name);
+  if (!position) {
+    return false;
+  }
+  return position.is_headgroup;
 };
 
 export default function page() {
@@ -64,10 +73,12 @@ export default function page() {
 
   const handlePositionChange = (e: any) => {
     const is_important = isPositionImportant(e.target.value);
+    const is_headgroup = isPositionHeadgroup(e.target.value);
     setValues({
       ...values,
       position: e.target.value,
-      is_important: is_important,
+      is_important,
+      is_headgroup,
     });
   };
 

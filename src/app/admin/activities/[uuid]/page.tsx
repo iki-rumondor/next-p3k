@@ -59,6 +59,11 @@ export default function page({ params }: { params: { uuid: string } }) {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  const handleChangeDate = (e: any) => {
+    const value = moment(e.target.value, "YYYY-MM-DD").valueOf();
+    setValues({ ...values, [e.target.name]: value });
+  };
+
   const handleChangeFile = (e: any) => {
     e.target.files && setFile(e.target.files[0]);
   };
@@ -83,6 +88,24 @@ export default function page({ params }: { params: { uuid: string } }) {
     name: "title",
     type: "text",
     value: values.title,
+  };
+
+  const locationProps = {
+    handleChange: handleChange,
+    label: "Lokasi Kegiatan",
+    placeholder: "Masukkan Lokasi Kegiatan",
+    name: "location",
+    type: "text",
+    value: values.location,
+  };
+
+  const dateProps = {
+    handleChange: handleChangeDate,
+    label: "Tanggal Kegiatan",
+    placeholder: "Masukkan Tanggal Kegiatan",
+    name: "date",
+    type: "date",
+    value: moment.unix(values.date / 1000).format("YYYY-MM-DD"),
   };
 
   const descriptionProps = {
@@ -139,6 +162,9 @@ export default function page({ params }: { params: { uuid: string } }) {
     formData.append("title", values.title);
     formData.append("group", values.group);
     formData.append("description", values.description);
+    formData.append("location", values.location);
+    formData.append("date", values.date);
+    
     try {
       setIsLoading(true);
       const response = await post_data(
@@ -216,6 +242,8 @@ export default function page({ params }: { params: { uuid: string } }) {
         <Select props={groupProps} />
         <Input props={titleProps} />
         <Textarea props={descriptionProps} />
+        <Input props={locationProps} />
+        <Input props={dateProps} />
         {file ? (
           <div className="mb-4.5">
             <p>Nama File : {file.name}</p>

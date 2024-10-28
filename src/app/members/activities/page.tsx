@@ -8,6 +8,7 @@ import MainTable from "./table";
 import { Activity } from "@/types/activity";
 
 interface Response {
+  is_headgroup: boolean;
   is_important: boolean;
   activities: Activity[];
 }
@@ -40,7 +41,7 @@ export default function page() {
 
   return (
     <>
-      {data?.is_important && (
+      {data?.is_headgroup && (
         <Link
           href={config.url_add}
           className="inline-flex items-center justify-center gap-2.5 bg-primary px-4 py-2 text-center font-medium text-white hover:bg-opacity-90 mb-4"

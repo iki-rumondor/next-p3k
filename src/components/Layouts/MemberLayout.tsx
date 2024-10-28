@@ -33,15 +33,32 @@ const importantMenuItems = [
     route: "/members/activities",
   },
   {
-    icon: <DashboardIcon />,
-    label: "Validasi Absen",
-    route: "/members/validation-activities",
-  },
-  {
     icon: <ClipboardIcon />,
     label: "Laporan",
     route: "#",
-    children: [{ label: "Kegiatan", route: "/members/reports/activities" }],
+    children: [
+      { label: "Kegiatan", route: "/members/reports/activities" },
+      { label: "Anggota", route: "/members/reports/members" },
+      { label: "Masyarakat", route: "/reports/citizens", blank: true },
+    ],
+  },
+];
+
+const headgroupMenuItems = [
+  {
+    icon: <DashboardIcon />,
+    label: "Dashboard",
+    route: "/members/dashboard",
+  },
+  {
+    icon: <DashboardIcon />,
+    label: "Kegiatan PKK",
+    route: "/members/activities",
+  },
+  {
+    icon: <DashboardIcon />,
+    label: "Validasi Absen",
+    route: "/members/validation-activities",
   },
 ];
 
@@ -78,6 +95,11 @@ export default function MemberLayout({
     if (data) {
       if (data.is_important) {
         setMenuItems(importantMenuItems);
+        return;
+      }
+      if (data.is_headgroup) {
+        setMenuItems(headgroupMenuItems);
+        return;
       }
     }
   }, [data]);

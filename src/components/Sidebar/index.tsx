@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactElement, useEffect, useRef, useState } from "react";
+import React, { ReactElement } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
@@ -14,10 +14,10 @@ interface SidebarProps {
 }
 
 interface MenuItem {
-  icon?: ReactElement; // Optional, since some items may not have icons
+  icon?: ReactElement;
   label: string;
   route: string;
-  children?: MenuItem[]; // Optional, for nested menu items
+  children?: MenuItem[];
 }
 
 interface MenuGroup {

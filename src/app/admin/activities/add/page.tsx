@@ -7,22 +7,28 @@ import Upload from "@/components/Forms/Upload";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
 import DeleteIcon from "@/components/Icons/DeleteIcon";
 import post_data from "actions/post_data";
+import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const defaultValue = {
   title: "",
   description: "",
   group: "",
+  location: "",
+  date: "",
 };
 
 const groups = [
   { value: 1, name: "POKJA I (PENGHAYATAN DAN PENGALAMAN PANCASILA)" },
   { value: 2, name: "POKJA II (PENDIDIKAN DAN KETERAMPILAN)" },
   { value: 3, name: "POKJA III (PANGAN, SANDANG, DAN PERUMAHAN)" },
-  { value: 4, name: "POKJA IV (KESEHATAN, KELESTARIAN LINGKUNGAN HIDUP, DAN PERENCANAAN SEHAT" },
+  {
+    value: 4,
+    name: "POKJA IV (KESEHATAN, KELESTARIAN LINGKUNGAN HIDUP, DAN PERENCANAAN SEHAT",
+  },
 ];
 
 const convertToMB = (bytes: number) => {
@@ -41,6 +47,9 @@ export default function page() {
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<any | null>(null);
   const [values, setValues] = useState(defaultValue);
+  useEffect(() => {
+    console.log(values);
+  }, [values]);
   const router = useRouter();
 
   const handleChange = (e: any) => {
@@ -73,6 +82,24 @@ export default function page() {
     value: values.title,
   };
 
+  const locationProps = {
+    handleChange: handleChange,
+    label: "Lokasi Kegiatan",
+    placeholder: "Masukkan Lokasi Kegiatan",
+    name: "location",
+    type: "text",
+    value: values.location,
+  };
+
+  const dateProps = {
+    handleChange: handleChange,
+    label: "Tanggal Kegiatan",
+    placeholder: "Masukkan Tanggal Kegiatan",
+    name: "date",
+    type: "date",
+    value: values.date,
+  };
+
   const descriptionProps = {
     handleChange: handleChange,
     label: "Deskripsi Kegiatan",
@@ -100,6 +127,10 @@ export default function page() {
     formData.append("title", values.title);
     formData.append("group", values.group);
     formData.append("description", values.description);
+    formData.append("location", values.location);
+
+    const unixTimeMillis = moment(values.date, "YYYY-MM-DD").valueOf();
+    formData.append("date", unixTimeMillis.toString());
 
     try {
       setIsLoading(true);
@@ -138,6 +169,8 @@ export default function page() {
         <Select props={groupProps} />
         <Input props={titleProps} />
         <Textarea props={descriptionProps} />
+        <Input props={locationProps} />
+        <Input props={dateProps} />
         {file ? (
           <div className="mb-4.5">
             <p>Nama File : {file.name}</p>
