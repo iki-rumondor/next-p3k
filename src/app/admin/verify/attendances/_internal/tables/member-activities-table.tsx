@@ -1,6 +1,5 @@
 "use client";
 
-import ListIcon from "@/components/Icons/ListIcon";
 import { MemberActivity } from "@/types/member-activity";
 import get_data from "actions/get_data";
 import post_data from "actions/post_data";

@@ -33,6 +33,7 @@ const menuGroups = [
         children: [
           { label: "Akun Penjual", route: "/admin/verify/shops" },
           { label: "Akun Pembeli", route: "/admin/verify/guests" },
+          { label: "Absensi Kegiatan", route: "/admin/verify/attendances" },
         ],
       },
       {

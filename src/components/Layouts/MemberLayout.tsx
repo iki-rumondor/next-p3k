@@ -44,24 +44,6 @@ const importantMenuItems = [
   },
 ];
 
-const headgroupMenuItems = [
-  {
-    icon: <DashboardIcon />,
-    label: "Dashboard",
-    route: "/members/dashboard",
-  },
-  {
-    icon: <DashboardIcon />,
-    label: "Kegiatan PKK",
-    route: "/members/activities",
-  },
-  {
-    icon: <DashboardIcon />,
-    label: "Validasi Absen",
-    route: "/members/validation-activities",
-  },
-];
-
 export default function MemberLayout({
   children,
 }: {
@@ -92,15 +74,9 @@ export default function MemberLayout({
   }, []);
 
   useEffect(() => {
-    if (data) {
-      if (data.is_important) {
-        setMenuItems(importantMenuItems);
-        return;
-      }
-      if (data.is_headgroup) {
-        setMenuItems(headgroupMenuItems);
-        return;
-      }
+    if (data && data.is_important) {
+      setMenuItems(importantMenuItems);
+      return;
     }
   }, [data]);
   return (
