@@ -95,6 +95,24 @@ export default function page({ params }: { params: { uuid: string } }) {
     rows: 7,
   };
 
+  const locationProps = {
+    disable: true,
+    label: "Lokasi Kegiatan",
+    placeholder: "Masukkan Lokasi Kegiatan",
+    name: "location",
+    type: "text",
+    value: values.location,
+  };
+
+  const dateProps = {
+    disable: true,
+    label: "Tanggal Kegiatan",
+    placeholder: "Masukkan Tanggal Kegiatan",
+    name: "date",
+    type: "date",
+    value: moment.unix(values.date / 1000).format("YYYY-MM-DD"),
+  };
+
   const uploadProps = {
     label: "Upload Bukti Kehadiran",
     handleChange: handleChangeFile,
@@ -198,6 +216,8 @@ export default function page({ params }: { params: { uuid: string } }) {
               <Select props={groupProps} />
               <Input props={titleProps} />
               <Textarea props={descriptionProps} />
+              <Input props={locationProps} />
+              <Input props={dateProps} />
               <div className="mt-5 pt-3 border-t border-stroke text-sm">
                 <div>
                   Diubah Oleh : <span>{values?.updated_user?.name}</span>

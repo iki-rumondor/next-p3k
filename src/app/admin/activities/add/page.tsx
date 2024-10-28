@@ -47,9 +47,6 @@ export default function page() {
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<any | null>(null);
   const [values, setValues] = useState(defaultValue);
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
   const router = useRouter();
 
   const handleChange = (e: any) => {
