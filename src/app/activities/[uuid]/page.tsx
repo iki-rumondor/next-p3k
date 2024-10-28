@@ -73,8 +73,13 @@ export default function page({ params }: { params: { uuid: string } }) {
                 {groups[values?.group - 1]}
               </div>
             </div>
-            <div className="mb-7">{values?.description}</div>
-            <small>{moment.unix(values?.created_at / 1000).fromNow()}</small>
+            <div className="mb-7">
+              <div>Lokasi: {values?.location}</div>
+              <div>{values?.description}</div>
+            </div>
+            <small>
+              Tanggal Kegiatan : {moment.unix(values?.date / 1000).format("DD/MM/YYYY")}
+            </small>
           </div>
         </div>
         <div className="col-span-1">

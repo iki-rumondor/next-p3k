@@ -7,6 +7,8 @@ export type Activity = {
   description: string;
   group: number;
   image_name: string;
+  location: string;
+  date: number;
   created_at: number;
   updated_at: number;
   members: Member[];
