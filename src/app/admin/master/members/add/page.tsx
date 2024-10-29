@@ -14,6 +14,7 @@ const defaultValue = {
   is_important: false,
   is_headgroup: false,
   position: "",
+  group: 0,
 };
 
 const positions = [
@@ -25,18 +26,63 @@ const positions = [
   { name: "WAKIL SEKRETARIS", is_important: false, is_headgroup: false },
   { name: "BENDAHARA", is_important: false, is_headgroup: false },
   { name: "WAKIL BENDAHARA", is_important: false, is_headgroup: false },
-  { name: "KETUA POKJA I", is_important: false, is_headgroup: true },
-  { name: "SEKRETARIS POKJA I", is_important: false, is_headgroup: false },
-  { name: "ANGGOTA POKJA I", is_important: false, is_headgroup: false },
-  { name: "KETUA POKJA II", is_important: false, is_headgroup: true },
-  { name: "SEKRETARIS POKJA II", is_important: false, is_headgroup: false },
-  { name: "ANGGOTA POKJA II", is_important: false, is_headgroup: false },
-  { name: "KETUA POKJA III", is_important: false, is_headgroup: true },
-  { name: "SEKRETARIS POKJA III", is_important: false, is_headgroup: false },
-  { name: "ANGGOTA POKJA III", is_important: false, is_headgroup: false },
-  { name: "KETUA POKJA IV", is_important: false, is_headgroup: true },
-  { name: "SEKRETARIS POKJA IV", is_important: false, is_headgroup: false },
-  { name: "ANGGOTA POKJA IV", is_important: false, is_headgroup: false },
+  { name: "KETUA POKJA I", is_important: false, is_headgroup: true, group: 1 },
+  {
+    name: "SEKRETARIS POKJA I",
+    is_important: false,
+    is_headgroup: false,
+    group: 1,
+  },
+  {
+    name: "ANGGOTA POKJA I",
+    is_important: false,
+    is_headgroup: false,
+    group: 1,
+  },
+  { name: "KETUA POKJA II", is_important: false, is_headgroup: true, group: 2 },
+  {
+    name: "SEKRETARIS POKJA II",
+    is_important: false,
+    is_headgroup: false,
+    group: 2,
+  },
+  {
+    name: "ANGGOTA POKJA II",
+    is_important: false,
+    is_headgroup: false,
+    group: 2,
+  },
+  {
+    name: "KETUA POKJA III",
+    is_important: false,
+    is_headgroup: true,
+    group: 3,
+  },
+  {
+    name: "SEKRETARIS POKJA III",
+    is_important: false,
+    is_headgroup: false,
+    group: 3,
+  },
+  {
+    name: "ANGGOTA POKJA III",
+    is_important: false,
+    is_headgroup: false,
+    group: 3,
+  },
+  { name: "KETUA POKJA IV", is_important: false, is_headgroup: true, group: 4 },
+  {
+    name: "SEKRETARIS POKJA IV",
+    is_important: false,
+    is_headgroup: false,
+    group: 4,
+  },
+  {
+    name: "ANGGOTA POKJA IV",
+    is_important: false,
+    is_headgroup: false,
+    group: 4,
+  },
 ];
 
 const isPositionImportant = (name: string): boolean => {
@@ -54,6 +100,11 @@ const isPositionHeadgroup = (name: string): boolean => {
   }
   return position.is_headgroup;
 };
+
+function getGroupByName(name: string) {
+  const position = positions.find((pos) => pos.name === name);
+  return position && position.group ? position.group : 0;
+}
 
 export default function page() {
   const config = {
@@ -74,11 +125,13 @@ export default function page() {
   const handlePositionChange = (e: any) => {
     const is_important = isPositionImportant(e.target.value);
     const is_headgroup = isPositionHeadgroup(e.target.value);
+    const group = getGroupByName(e.target.value);
     setValues({
       ...values,
       position: e.target.value,
       is_important,
       is_headgroup,
+      group,
     });
   };
 

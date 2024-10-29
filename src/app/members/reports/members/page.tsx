@@ -26,7 +26,7 @@ export default function page() {
   };
 
   const handleClick = () => {
-    const url = `/reports/activities/?group=${filter}`;
+    const url = `/reports/members/?group=${filter}`;
     window.open(url, "_blank");
   };
 
@@ -34,7 +34,7 @@ export default function page() {
 
   return (
     <div>
-      <BasicCard title="Laporan Kegiatan">
+      <BasicCard title="Laporan Anggota">
         <div className="p-5">
           <Select props={filterProps} />
           <button
