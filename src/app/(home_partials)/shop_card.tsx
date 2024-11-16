@@ -29,11 +29,15 @@ export const ShopCard = ({ props }: { props: Props }) => {
         <small className="font-normal text-gray-700">
           Owner: {props?.owner}
         </small>
-        <p className="font-normal text-gray-700 mt-1">No HP: {props.phone_number}</p>
-        <p className="font-normal text-gray-700 mt-1">Alamat: {props.address}</p>
+        <p className="font-normal text-gray-700 mt-1">
+          No HP: {props.phone_number}
+        </p>
+        <p className="font-normal text-gray-700 mt-1">
+          Alamat: {props.address}
+        </p>
         <Link
           className="text-blue-700 hover:text-blue-800 font-medium rounded-lg text-sm mt-4"
-          href={`products/${props.uuid}`}
+          href={`products?shop=${props.uuid}`}
         >
           {"Lihat Produk >"}
         </Link>
