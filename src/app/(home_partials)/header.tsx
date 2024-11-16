@@ -22,6 +22,7 @@ export default function HomeHeader({
       <div className="gap-6 items-center md:flex hidden">
         <Link href={"/"}>Beranda</Link>
         <Link href={"/activities"}>Kegiatan PKK</Link>
+        <Link href={"/shops"}>UMKM</Link>
         <Link href={"/products"}>Produk UMKM</Link>
         {isLogin ? (
           <Link

@@ -9,6 +9,8 @@ import { Activity } from "@/types/activity";
 import get_data from "actions/get_data";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { Umkm } from "@/types/umkm";
+import { ShopCard } from "./(home_partials)/shop_card";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -16,6 +18,7 @@ export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [shops, setShops] = useState<Umkm[]>([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -29,6 +32,9 @@ export default function Home() {
 
       const res2 = await get_data("", "/activities?limit=6");
       res2.data && setActivities(res2.data);
+
+      const res3 = await get_data("", "/shops?limit=8");
+      res3.data && setShops(res3.data);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -61,14 +67,6 @@ export default function Home() {
               Media informasi Kegiatan Dasawisma dan PKK dan jual beli produk
               UMKM Desa Tingkohubu
             </div>
-            {/* <div>
-              <Link
-                className="hover:bg-blue-700 bg-black px-5 py-2 inline-flex text-md mt-4 font-medium"
-                href={"/test"}
-              >
-                Login Pengguna
-              </Link>
-            </div> */}
           </div>
         </div>
       </div>
@@ -76,35 +74,60 @@ export default function Home() {
         <div className="text-center text-title-xl2 font-medium text-black mb-10">
           Tentang
         </div>
-        <div className="grid grid-cols-2 gap-1 items-center">
-          <div>
-            <Image
-              src={"/images/test-img.jpeg"}
-              alt="about-image"
-              width={500}
-              height={1}
-            />
-          </div>
-          <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-1 gap-3 items-center px-5">
+          <div className="flex flex-col gap-3 shadow-1 p-4 bg-whiten">
             <div>
-              <div className="font-semibold text-lg">Visi</div>
-              <div>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil
-                ea blanditiis recusandae, eaque fuga id dolorem dignissimos
-                tempore ratione earum, doloremque repellendus dolores laborum
-                optio ipsam fugiat. Aliquid, est nostrum!
-              </div>
+              PKK adalah singkatan dari Pemberdayaan Kesejahteraan Keluarga,
+              yaitu organisasi kemasyarakatan yang bertujuan untuk meningkatkan
+              kesejahteraan masyarakat, khususnya keluarga. PKK bekerja sama
+              dengan pemerintah dan organisasi kemasyarakatan lainnya untuk
+              melaksanakan program-programnya
             </div>
             <div>
-              <div className="font-semibold text-lg">Misi</div>
-              <div>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil
-                ea blanditiis recusandae, eaque fuga id dolorem dignissimos
-                tempore ratione earum, doloremque repellendus dolores laborum
-                optio ipsam fugiat. Aliquid, est nostrum!
-              </div>
+              Berikut ini adalah beberapa hal yang berkaitan dengan PKK: Program
+              pokok PKK memiliki 10 program pokok yang dikenal sebagai 10 Segi
+              Kehidupan Keluarga, yaitu:
             </div>
           </div>
+          <div className="flex flex-col gap-1 bg-whiten p-5">
+            <ol>
+              <li>1. Penghayatan dan Pengamalan Pancasila</li>
+              <li>2. Gotong Royong</li>
+              <li>3. Pangan</li>
+              <li>4. Sandang</li>
+              <li>5. Perumahan dan Tata Laksana Rumah Tangga</li>
+              <li>6. Pendidikan dan Ketrampilan</li>
+              <li>7. Kesehatan</li>
+              <li>8. Pengembangan Kehidupan Berkoperasi</li>
+              <li>9. Kelestarian Lingkungan Hidup</li>
+              <li>10. Perencanaan Sehat</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+      <section className="p-10 mt-10">
+        <div className="text-center text-title-xl2 font-medium text-black mb-10">
+          Toko UMKM
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-4 sm:grid-cols-2 sm:gap-3 gap-0">
+          {shops &&
+            shops.map((item) => (
+              <ShopCard
+                props={{
+                  uuid: item.uuid,
+                  name: item.name,
+                  image_name: item.shop_image,
+                  owner: item.owner,
+                  address: item.address,
+                  phone_number: item.phone_number,
+                }}
+              />
+            ))}
+        </div>
+        <div className="w-full mt-10 text-center text-md bg-primary text-white py-2">
+          <Link href={"/shops"} className="w-full block">
+            Selengkapnya..
+          </Link>
         </div>
       </section>
       <section className="p-10 mt-10">
