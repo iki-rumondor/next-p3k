@@ -148,10 +148,16 @@ export default function page({ params }: { params: { uuid: string } }) {
             <ListItem name="Jumlah Yang Dibeli" value={values?.quantity} />
           </div>
           <div className="border-t border-stroke px-6.5 py-4 dark:border-strokedark">
-            <ListItem
-              name="Kontak Pembeli"
-              value={values?.user?.phone_number}
-            />
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <p>Kontak Pembeli :</p>
+              <Link
+                target="_blank"
+                href={`https://api.whatsapp.com/send?phone=${values?.user?.phone_number}`}
+                className="text-right font-medium text-primary hover:text-blue-800 hover:underline"
+              >
+                {values?.user?.phone_number}
+              </Link>
+            </div>
             {values?.proof_file ? (
               <ListItem
                 name="Bukti Pembayaran"

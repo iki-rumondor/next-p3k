@@ -112,16 +112,18 @@ export default function page() {
           />
         </div>
       )}
-      <div className="w-1/2">
-        <LayoutForm
-          isLoading={isLoading}
-          handleSubmit={handleSubmit}
-          title="Ubah Password"
-        >
-          <Input props={oldPassword} />
-          <Input props={newPassword} />
-          <Input props={confirmPassword} />
-        </LayoutForm>
+      <div className="grid grid-cols-2 gap-5">
+        <div>
+          <LayoutForm
+            isLoading={isLoading}
+            handleSubmit={handleSubmit}
+            title="Ubah Password"
+          >
+            <Input props={oldPassword} />
+            <Input props={newPassword} />
+            <Input props={confirmPassword} />
+          </LayoutForm>
+        </div>
       </div>
     </div>
   );
