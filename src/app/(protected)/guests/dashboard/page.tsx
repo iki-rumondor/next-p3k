@@ -12,6 +12,10 @@ import toast from "react-hot-toast";
 interface Data {
   success_transactions: number;
   unprocess_transactions: number;
+  name: string;
+  address: string;
+  phone_number: string;
+  uuid: string;
 }
 
 const defaultValue = {
@@ -20,13 +24,26 @@ const defaultValue = {
   confirm_password: "",
 };
 
+const defaultGuestData = {
+  uuid: "",
+  name: "",
+  address: "",
+  phone_number: "",
+};
+
 export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingGuest, setIsLoadingGuest] = useState(false);
   const [data, setData] = useState<Data>();
   const [values, setValues] = useState(defaultValue);
+  const [guestData, setGuestData] = useState(defaultGuestData);
 
   const handleChange = (e: any) => {
     setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const handleChangeGuest = (e: any) => {
+    setGuestData({ ...guestData, [e.target.name]: e.target.value });
   };
 
   const oldPassword = {
@@ -53,6 +70,30 @@ export default function Page() {
     handleChange: handleChange,
   };
 
+  const shopName = {
+    label: "Nama",
+    name: "name",
+    type: "text",
+    value: guestData.name,
+    handleChange: handleChangeGuest,
+  };
+
+  const phoneNumber = {
+    label: "Nomor Handphone",
+    name: "phone_number",
+    type: "text",
+    value: guestData.phone_number,
+    handleChange: handleChangeGuest,
+  };
+
+  const address = {
+    label: "Alamat",
+    name: "address",
+    type: "text",
+    value: guestData.address,
+    handleChange: handleChangeGuest,
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const token = localStorage.getItem("token") || "";
@@ -73,12 +114,40 @@ export default function Page() {
     }
   };
 
+  const handleSubmitGuestData = async (e: any) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token") || "";
+    try {
+      setIsLoadingGuest(true);
+      const response = await post_data(
+        token,
+        `/guests/${guestData.uuid}`,
+        "PUT",
+        guestData
+      );
+      toast.success(response.message);
+      location.reload();
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoadingGuest(false);
+    }
+  };
+
   const handleLoad = async () => {
     const token = localStorage.getItem("token") || "";
     try {
       setIsLoading(true);
       const response = await get_data(token, "/dashboard/guest");
-      response.data && setData(response.data);
+      if (response.data) {
+        setData(response.data);
+        setGuestData({
+          address: response.data.address,
+          name: response.data.name,
+          uuid: response.data.uuid,
+          phone_number: response.data.phone_number,
+        });
+      }
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -111,16 +180,29 @@ export default function Page() {
           />
         </div>
       )}
-      <div className="w-1/2">
-        <LayoutForm
-          isLoading={isLoading}
-          handleSubmit={handleSubmit}
-          title="Ubah Password"
-        >
-          <Input props={oldPassword} />
-          <Input props={newPassword} />
-          <Input props={confirmPassword} />
-        </LayoutForm>
+      <div className="grid grid-cols-2 gap-5">
+        <div>
+          <LayoutForm
+            isLoading={isLoadingGuest}
+            handleSubmit={handleSubmitGuestData}
+            title="Ubah Data"
+          >
+            <Input props={shopName} />
+            <Input props={phoneNumber} />
+            <Input props={address} />
+          </LayoutForm>
+        </div>
+        <div>
+          <LayoutForm
+            isLoading={isLoading}
+            handleSubmit={handleSubmit}
+            title="Ubah Password"
+          >
+            <Input props={oldPassword} />
+            <Input props={newPassword} />
+            <Input props={confirmPassword} />
+          </LayoutForm>
+        </div>
       </div>
     </div>
   );

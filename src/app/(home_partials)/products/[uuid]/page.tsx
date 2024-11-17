@@ -45,6 +45,7 @@ export default function page({ params }: { params: { uuid: string } }) {
         stock: resp.data.stock,
         image_name: resp.data.image_name,
         umkm: resp.data?.shop?.name,
+        phone_number: resp.data?.shop?.phone_number,
         unit: resp.data?.unit,
       });
       setIsCheck(true);
@@ -125,9 +126,14 @@ export default function page({ params }: { params: { uuid: string } }) {
               >
                 Beli Produk
               </button>
-              {/* <button className="bg-warning hover:bg-yellow-700 px-7 py-2 text-white mt-6">
-                Tambahkan Ke Favorit
-              </button> */}
+              <button className="bg-warning hover:bg-yellow-700 px-7 py-2 text-white mt-6">
+                <Link
+                  target="_blank"
+                  href={`https://api.whatsapp.com/send?phone=${values?.phone_number}`}
+                >
+                  Hubungi Penjual
+                </Link>
+              </button>
             </div>
           </div>
         </div>

@@ -20,13 +20,27 @@ const defaultValue = {
   confirm_password: "",
 };
 
+const defaultShopData = {
+  uuid: "",
+  name: "",
+  owner: "",
+  address: "",
+  phone_number: "",
+};
+
 export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingShop, setIsLoadingShop] = useState(false);
   const [data, setData] = useState<Data>();
   const [values, setValues] = useState(defaultValue);
+  const [shopData, setShopData] = useState(defaultShopData);
 
   const handleChange = (e: any) => {
     setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const handleChangeShop = (e: any) => {
+    setShopData({ ...shopData, [e.target.name]: e.target.value });
   };
 
   const oldPassword = {
@@ -53,6 +67,38 @@ export default function Page() {
     handleChange: handleChange,
   };
 
+  const shopName = {
+    label: "Nama UMKM",
+    name: "name",
+    type: "text",
+    value: shopData.name,
+    handleChange: handleChangeShop,
+  };
+
+  const ownerName = {
+    label: "Nama Pemilik UMKM",
+    name: "owner",
+    type: "text",
+    value: shopData.owner,
+    handleChange: handleChangeShop,
+  };
+
+  const phoneNumber = {
+    label: "Nomor Handphone",
+    name: "phone_number",
+    type: "text",
+    value: shopData.phone_number,
+    handleChange: handleChangeShop,
+  };
+
+  const address = {
+    label: "Alamat",
+    name: "address",
+    type: "text",
+    value: shopData.address,
+    handleChange: handleChange,
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const token = localStorage.getItem("token") || "";
@@ -73,12 +119,34 @@ export default function Page() {
     }
   };
 
+  const handleSubmitShopData = async (e: any) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token") || "";
+    try {
+      setIsLoadingShop(true);
+      const response = await post_data(
+        token,
+        `/shops/${shopData.uuid}`,
+        "PUT",
+        shopData
+      );
+      toast.success(response.message);
+      location.reload();
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoadingShop(false);
+    }
+  };
+
   const handleLoad = async () => {
     const token = localStorage.getItem("token") || "";
     try {
       setIsLoading(true);
       const response = await get_data(token, "/dashboard/shop");
       response.data && setData(response.data);
+      const resp2 = await get_data(token, "/shops/user");
+      resp2.data && setShopData(resp2.data);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -111,16 +179,30 @@ export default function Page() {
           />
         </div>
       )}
-      <div className="w-1/2">
-        <LayoutForm
-          isLoading={isLoading}
-          handleSubmit={handleSubmit}
-          title="Ubah Password"
-        >
-          <Input props={oldPassword} />
-          <Input props={newPassword} />
-          <Input props={confirmPassword} />
-        </LayoutForm>
+      <div className="grid grid-cols-2 gap-5">
+        <div>
+          <LayoutForm
+            isLoading={isLoadingShop}
+            handleSubmit={handleSubmitShopData}
+            title="Ubah Data"
+          >
+            <Input props={shopName} />
+            <Input props={ownerName} />
+            <Input props={phoneNumber} />
+            <Input props={address} />
+          </LayoutForm>
+        </div>
+        <div>
+          <LayoutForm
+            isLoading={isLoading}
+            handleSubmit={handleSubmit}
+            title="Ubah Password"
+          >
+            <Input props={oldPassword} />
+            <Input props={newPassword} />
+            <Input props={confirmPassword} />
+          </LayoutForm>
+        </div>
       </div>
     </div>
   );
