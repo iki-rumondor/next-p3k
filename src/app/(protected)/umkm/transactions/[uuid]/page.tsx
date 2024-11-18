@@ -11,6 +11,13 @@ import moment from "moment";
 import post_data from "actions/post_data";
 import axios from "axios";
 
+function formatPhoneNumber(phoneNumber: string): string {
+  if (phoneNumber.startsWith("08")) {
+    return phoneNumber.replace(/^08/, "+628");
+  }
+  return phoneNumber;
+}
+
 const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 const ListItem = ({ name, value }: { name: string; value: any }) => {
@@ -152,7 +159,9 @@ export default function page({ params }: { params: { uuid: string } }) {
               <p>Kontak Pembeli :</p>
               <Link
                 target="_blank"
-                href={`https://api.whatsapp.com/send?phone=${values?.user?.phone_number}`}
+                href={`https://api.whatsapp.com/send?phone=${formatPhoneNumber(
+                  values?.user?.phone_number
+                )}`}
                 className="text-right font-medium text-primary hover:text-blue-800 hover:underline"
               >
                 {values?.user?.phone_number}

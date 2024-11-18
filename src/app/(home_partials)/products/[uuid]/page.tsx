@@ -10,6 +10,13 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+function formatPhoneNumber(phoneNumber: string): string {
+  if (phoneNumber.startsWith("08")) {
+    return phoneNumber.replace(/^08/, "+628");
+  }
+  return phoneNumber;
+}
+
 const baseAPIUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 export default function page({ params }: { params: { uuid: string } }) {
@@ -129,7 +136,9 @@ export default function page({ params }: { params: { uuid: string } }) {
               <button className="bg-warning hover:bg-yellow-700 px-7 py-2 text-white mt-6">
                 <Link
                   target="_blank"
-                  href={`https://api.whatsapp.com/send?phone=${values?.phone_number}`}
+                  href={`https://api.whatsapp.com/send?phone=${formatPhoneNumber(
+                    values?.phone_number
+                  )}`}
                 >
                   Hubungi Penjual
                 </Link>
