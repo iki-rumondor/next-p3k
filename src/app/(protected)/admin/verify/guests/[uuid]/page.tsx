@@ -2,9 +2,7 @@
 import Input from "@/components/Forms/Input";
 import LayoutForm from "@/components/Forms/Layout";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
-import DeleteIcon from "@/components/Icons/DeleteIcon";
 import Loader from "@/components/Loader";
-import DeleteModal from "@/components/Modal/DeleteModal";
 import { Guest } from "@/types/guest";
 import get_data from "actions/get_data";
 import post_data from "actions/post_data";
@@ -28,7 +26,6 @@ const defaultValue = {
 };
 
 export default function page({ params }: { params: { uuid: string } }) {
-  const [open, setOpen] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [values, setValues] = useState<Guest>(defaultValue);
@@ -70,24 +67,6 @@ export default function page({ params }: { params: { uuid: string } }) {
     }
   };
 
-  const handleDelete = async () => {
-    const token = localStorage.getItem("token") || "";
-    try {
-      setIsLoading(true);
-      const response = await post_data(
-        token,
-        `/majors/${params.uuid}`,
-        "DELETE"
-      );
-      toast.success(response.message);
-      router.push("/admin/verify/guests");
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const nameProps = {
     disable: true,
     label: "Nama Lengkap",
@@ -116,14 +95,6 @@ export default function page({ params }: { params: { uuid: string } }) {
     type: "text",
   };
 
-  const deleteProps = {
-    title:
-      'Setelah anda menekan tombol "Ya", semua data terkait pembeli tersebut akan dihapus juga!!',
-    toggleModal: () => setOpen(!open),
-    handleSubmit: handleDelete,
-    isLoading: isLoading,
-  };
-
   useEffect(() => {
     handleLoad();
   }, []);
@@ -142,17 +113,6 @@ export default function page({ params }: { params: { uuid: string } }) {
           </span>
           Kembali
         </Link>
-        <button
-          onClick={() => {
-            setOpen(true);
-          }}
-          className="inline-flex items-center justify-center gap-2.5 bg-rose-600 px-4 py-2 text-center font-medium text-white hover:bg-opacity-90 mb-4"
-        >
-          <span>
-            <DeleteIcon />
-          </span>
-          Hapus
-        </button>
       </div>
       <LayoutForm
         isLoading={isLoading}
@@ -169,8 +129,6 @@ export default function page({ params }: { params: { uuid: string } }) {
         <Input props={phoneNumProps} />
         <Input props={usernameProps} />
       </LayoutForm>
-
-      {open && <DeleteModal props={deleteProps} />}
     </>
   );
 }
