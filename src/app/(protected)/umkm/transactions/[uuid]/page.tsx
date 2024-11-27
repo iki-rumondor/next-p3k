@@ -13,7 +13,7 @@ import axios from "axios";
 
 function formatPhoneNumber(phoneNumber: string): string {
   if (phoneNumber.startsWith("08")) {
-    return phoneNumber.replace(/^08/, "+628");
+    return phoneNumber.replace(/^08/, "628");
   }
   return phoneNumber;
 }
