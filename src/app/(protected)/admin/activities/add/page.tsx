@@ -91,7 +91,7 @@ export default function page() {
 
   const startProps = {
     handleChange: handleChange,
-    label: "Tanggal Kegiatan",
+    label: "Tanggal Mulai Kegiatan",
     placeholder: "Masukkan Tanggal Kegiatan",
     name: "start_time",
     type: "datetime-local",
@@ -100,7 +100,7 @@ export default function page() {
 
   const endProps = {
     handleChange: handleChange,
-    label: "Tanggal Kegiatan",
+    label: "Tanggal Selesai Kegiatan",
     placeholder: "Masukkan Tanggal Kegiatan",
     name: "end_time",
     type: "datetime-local",

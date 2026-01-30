@@ -104,13 +104,22 @@ export default function page({ params }: { params: { uuid: string } }) {
     value: values.location,
   };
 
-  const dateProps = {
+  const startProps = {
     disable: true,
-    label: "Tanggal Kegiatan",
+    label: "Tanggal Mulai Kegiatan",
     placeholder: "Masukkan Tanggal Kegiatan",
-    name: "date",
-    type: "date",
-    value: moment.unix(values.date / 1000).format("YYYY-MM-DD"),
+    name: "start_time",
+    type: "datetime-local",
+    value: moment.unix(values.start_time / 1000).format("YYYY-MM-DDTHH:mm"),
+  };
+
+  const endProps = {
+    disable: true,
+    label: "Tanggal Selesai Kegiatan",
+    placeholder: "Masukkan Tanggal Kegiatan",
+    name: "end_time",
+    type: "datetime-local",
+    value: moment.unix(values.end_time / 1000).format("YYYY-MM-DDTHH:mm"),
   };
 
   const uploadProps = {
@@ -217,7 +226,8 @@ export default function page({ params }: { params: { uuid: string } }) {
               <Input props={titleProps} />
               <Textarea props={descriptionProps} />
               <Input props={locationProps} />
-              <Input props={dateProps} />
+              <Input props={startProps} />
+              <Input props={endProps} />
               <div className="mt-5 pt-3 border-t border-stroke text-sm">
                 <div>
                   Diubah Oleh : <span>{values?.updated_user?.name}</span>

@@ -99,13 +99,22 @@ export default function page({ params }: { params: { uuid: string } }) {
     value: values.location,
   };
 
-  const dateProps = {
-    handleChange: handleChangeDate,
-    label: "Tanggal Kegiatan",
+  const startProps = {
+    handleChange: handleChange,
+    label: "Tanggal Mulai Kegiatan",
     placeholder: "Masukkan Tanggal Kegiatan",
-    name: "date",
-    type: "date",
-    value: moment.unix(values.date / 1000).format("YYYY-MM-DD"),
+    name: "start_time",
+    type: "datetime-local",
+    value: values.start_time,
+  };
+
+  const endProps = {
+    handleChange: handleChange,
+    label: "Tanggal Selesai Kegiatan",
+    placeholder: "Masukkan Tanggal Kegiatan",
+    name: "end_time",
+    type: "datetime-local",
+    value: values.end_time,
   };
 
   const descriptionProps = {
@@ -163,8 +172,13 @@ export default function page({ params }: { params: { uuid: string } }) {
     formData.append("group", values.group);
     formData.append("description", values.description);
     formData.append("location", values.location);
-    formData.append("date", values.date);
     
+    const startTime = moment(values.start_time, "YYYY-MM-DD HH:mm").valueOf();
+    formData.append("start_time", startTime.toString());
+
+    const endTime = moment(values.end_time, "YYYY-MM-DD HH:mm").valueOf();
+    formData.append("end_time", endTime.toString());
+
     try {
       setIsLoading(true);
       const response = await post_data(
@@ -243,7 +257,8 @@ export default function page({ params }: { params: { uuid: string } }) {
         <Input props={titleProps} />
         <Textarea props={descriptionProps} />
         <Input props={locationProps} />
-        <Input props={dateProps} />
+        <Input props={startProps} />
+        <Input props={endProps} />
         {file ? (
           <div className="mb-4.5">
             <p>Nama File : {file.name}</p>
