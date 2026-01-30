@@ -18,7 +18,8 @@ const defaultValue = {
   description: "",
   group: "",
   location: "",
-  date: "",
+  start_time: "",
+  end_time: "",
 };
 
 const groups = [
@@ -88,13 +89,22 @@ export default function page() {
     value: values.location,
   };
 
-  const dateProps = {
+  const startProps = {
     handleChange: handleChange,
     label: "Tanggal Kegiatan",
     placeholder: "Masukkan Tanggal Kegiatan",
-    name: "date",
-    type: "date",
-    value: values.date,
+    name: "start_time",
+    type: "datetime-local",
+    value: values.start_time,
+  };
+
+  const endProps = {
+    handleChange: handleChange,
+    label: "Tanggal Kegiatan",
+    placeholder: "Masukkan Tanggal Kegiatan",
+    name: "end_time",
+    type: "datetime-local",
+    value: values.end_time,
   };
 
   const descriptionProps = {
@@ -126,8 +136,11 @@ export default function page() {
     formData.append("description", values.description);
     formData.append("location", values.location);
 
-    const unixTimeMillis = moment(values.date, "YYYY-MM-DD").valueOf();
-    formData.append("date", unixTimeMillis.toString());
+    const startTime = moment(values.start_time, "YYYY-MM-DD HH:mm").valueOf();
+    formData.append("start_time", startTime.toString());
+
+    const endTime = moment(values.end_time, "YYYY-MM-DD HH:mm").valueOf();
+    formData.append("end_time", endTime.toString());
 
     try {
       setIsLoading(true);
@@ -167,7 +180,8 @@ export default function page() {
         <Input props={titleProps} />
         <Textarea props={descriptionProps} />
         <Input props={locationProps} />
-        <Input props={dateProps} />
+        <Input props={startProps} />
+        <Input props={endProps} />
         {file ? (
           <div className="mb-4.5">
             <p>Nama File : {file.name}</p>
