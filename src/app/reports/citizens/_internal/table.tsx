@@ -2,16 +2,19 @@
 import { Citizen } from "@/types/citizen";
 import get_data from "actions/get_data";
 import moment from "moment";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function CitizensTable() {
   const [data, setData] = useState<Citizen[]>([]);
+  const searchParams = useSearchParams();
+  const region = searchParams.get("region");
 
   const handleLoad = async () => {
     const token = localStorage.getItem("token") || "";
     try {
-      const resp = await get_data(token, `/citizens`);
+      const resp = await get_data(token, `/citizens?region=${region}`);
       setData(resp.data);
     } catch (error: any) {
       toast.error(error.message);
@@ -33,6 +36,9 @@ export default function CitizensTable() {
             Nomor Telepon
           </th>
           <th className="border px-2 py-1 font-medium text-black">
+            Dusun
+          </th>
+          <th className="border px-2 py-1 font-medium text-black">
             Ditambahkan Pada
           </th>
         </tr>
@@ -52,6 +58,9 @@ export default function CitizensTable() {
               </td>
               <td className="border px-2 py-1">
                 <p className="text-black">{item.phone_number}</p>
+              </td>
+              <td className="border px-2 py-1">
+                <p className="text-black">{item.region.name}</p>
               </td>
               <td className="border px-2 py-1">
                 <p className="text-black">

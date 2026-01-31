@@ -39,7 +39,7 @@ const importantMenuItems = [
     children: [
       { label: "Kegiatan", route: "/members/reports/activities" },
       { label: "Anggota", route: "/members/reports/members" },
-      { label: "Masyarakat", route: "/reports/citizens", blank: true },
+      { label: "Masyarakat", route: "/members/reports/citizens" },
     ],
   },
 ];
