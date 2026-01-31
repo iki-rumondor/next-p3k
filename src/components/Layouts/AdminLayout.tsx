@@ -23,6 +23,7 @@ const menuGroups = [
           { label: "Kategori", route: "/admin/master/categories" },
           // { label: "Umkm", route: "/admin/master/umkm" },
           { label: "Anggota", route: "/admin/master/members" },
+          { label: "Dusun", route: "/admin/master/regions" },
           { label: "Masyarakat", route: "/admin/master/citizens" },
         ],
       },

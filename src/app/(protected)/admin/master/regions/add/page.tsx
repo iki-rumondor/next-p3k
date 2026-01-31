@@ -13,24 +13,18 @@ import toast from "react-hot-toast";
 
 const defaultValue = {
   name: "",
-  nik: "",
-  owner: "",
-  address: "",
-  phone_number: "",
-  region_id: "",
 };
 
 export default function page() {
   const config = {
-    back_url: "../citizens",
-    back_push: "/admin/master/citizens",
-    submit_api: "/citizens",
-    title_form: "Tambah Data Masyarakat",
+    back_url: "../regions",
+    back_push: "/admin/master/regions",
+    submit_api: "/regions",
+    title_form: "Tambah Data Dusun",
   };
 
   const [isLoading, setIsLoading] = useState(false);
   const [values, setValues] = useState(defaultValue);
-  const [regions, setRegions] = useState<any[]>([]);
   const router = useRouter();
 
   const handleChange = (e: any) => {
@@ -40,52 +34,12 @@ export default function page() {
   const nameProps = {
     handleChange: handleChange,
     label: "Nama",
-    placeholder: "Masukkan Nama Lengkap",
+    placeholder: "Masukkan Nama Dusun",
     name: "name",
     type: "text",
     value: values.name,
   };
 
-  const nikProps = {
-    handleChange: handleChange,
-    label: "NIK",
-    placeholder: "Masukkan Nomor Induk Kependudukan",
-    name: "nik",
-    type: "text",
-    value: values.nik,
-  };
-
-  const addressProps = {
-    handleChange: handleChange,
-    label: "Alamat",
-    placeholder: "Masukkan Alamat Lengkap",
-    name: "address",
-    type: "text",
-    value: values.address,
-  };
-
-  const phoneNumberProps = {
-    handleChange: handleChange,
-    label: "Nomor Telepon",
-    placeholder: "Masukkan Nomor Telepon Yang Bisa Dihubungi",
-    name: "phone_number",
-    type: "text",
-    value: values.phone_number,
-  };
-
-
-  const regionProps = {
-    value: values.region_id,
-    options: regions.map((item) => {
-      return {
-        name: item.Name,
-        value: item.ID,
-      };
-    }),
-    name: "region_id",
-    label: "Pilih Dusun",
-    handleChange: handleChange,
-  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -107,16 +61,6 @@ export default function page() {
     }
   };
 
-  const handleLoad = async () => {
-    const token = localStorage.getItem("token") || "";
-    const resp = await get_data(token, "/regions");
-    setRegions(resp.data);
-  }
-
-  useEffect(() => {
-    handleLoad();
-  }, []);
-
   return (
     <>
       <Link
@@ -134,10 +78,6 @@ export default function page() {
         title={config.title_form}
       >
         <Input props={nameProps} />
-        <Input props={nikProps} />
-        <Input props={addressProps} />
-        <Input props={phoneNumberProps} />
-        <Select props={regionProps} />
       </LayoutForm>
     </>
   );

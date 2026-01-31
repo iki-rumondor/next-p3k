@@ -9,4 +9,7 @@ export type Citizen = {
   created_at: number;
   updated_at: number;
   user: User;
+  region: {
+    name: string;
+  };
 };

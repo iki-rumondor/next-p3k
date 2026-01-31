@@ -1,7 +1,6 @@
 "use client";
 import Input from "@/components/Forms/Input";
 import LayoutForm from "@/components/Forms/Layout";
-import Select from "@/components/Forms/Select";
 import BackArrowIcon from "@/components/Icons/BackArrowIcon";
 import DeleteIcon from "@/components/Icons/DeleteIcon";
 import Loader from "@/components/Loader";
@@ -15,17 +14,16 @@ import toast from "react-hot-toast";
 
 export default function page({ params }: { params: { uuid: string } }) {
   const config = {
-    back_url: "../citizens",
-    back_push: "/admin/master/citizens",
-    default_api: `/citizens/${params.uuid}`,
-    title_form: "Update Data Masyarakat",
-    delete_message: "Apakah anda yakin akan menghapus masyarakat tersebut?",
+    back_url: "../regions",
+    back_push: "/admin/master/regions",
+    default_api: `/regions/${params.uuid}`,
+    title_form: "Update Data Dusun",
+    delete_message: "Apakah anda yakin akan menghapus dusun tersebut?",
   };
 
   const [open, setOpen] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [values, setValues] = useState<any>({});
-  const [regions, setRegions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -36,64 +34,20 @@ export default function page({ params }: { params: { uuid: string } }) {
   const nameProps = {
     handleChange: handleChange,
     label: "Nama",
-    placeholder: "Masukkan Nama Lengkap",
+    placeholder: "Masukkan Nama Dusun",
     name: "name",
     type: "text",
     value: values.name,
   };
 
-  const nikProps = {
-    handleChange: handleChange,
-    label: "NIK",
-    placeholder: "Masukkan Nomor Induk Kependudukan",
-    name: "nik",
-    type: "text",
-    value: values.nik,
-  };
-
-  const addressProps = {
-    handleChange: handleChange,
-    label: "Alamat",
-    placeholder: "Masukkan Alamat Lengkap",
-    name: "address",
-    type: "text",
-    value: values.address,
-  };
-
-  const phoneNumberProps = {
-    handleChange: handleChange,
-    label: "Nomor Telepon",
-    placeholder: "Masukkan Nomor Telepon Yang Bisa Dihubungi",
-    name: "phone_number",
-    type: "text",
-    value: values.phone_number,
-  };
-
-  const regionProps = {
-    value: values.region_id,
-    options: regions.map((item) => {
-      return {
-        name: item.Name,
-        value: item.ID,
-      };
-    }),
-    name: "region_id",
-    label: "Pilih Dusun",
-    handleChange: handleChange,
-  };
 
   const handleLoad = async () => {
     const token = localStorage.getItem("token") || "";
     try {
       setIsLoading(true);
       const resp = await get_data(token, config.default_api);
-      const resp2 = await get_data(token, "/regions");
-      setRegions(resp2.data);
       setValues({
-        name: resp.data.name,
-        nik: resp.data.nik,
-        address: resp.data.address,
-        phone_number: resp.data.phone_number,
+        name: resp.data.Name,
       });
     } catch (error: any) {
       toast.error(error.message);
@@ -181,11 +135,6 @@ export default function page({ params }: { params: { uuid: string } }) {
         title={config.title_form}
       >
         <Input props={nameProps} />
-        <Input props={nikProps} />
-        <Input props={addressProps} />
-        <Input props={phoneNumberProps} />
-        <Select props={regionProps} />
-
       </LayoutForm>
 
       {open && <DeleteModal props={deleteProps} />}
