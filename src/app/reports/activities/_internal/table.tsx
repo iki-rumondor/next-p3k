@@ -11,6 +11,19 @@ const groups = ["POKJA I", "POKJA II", "POKJA III", "POKJA IV"];
 export default function ActivityTable() {
   const searchParams = useSearchParams();
   const group = searchParams.get("group");
+  const startDate = moment(
+    searchParams.get("start_date"),
+    "YYYY-MM-DD"
+  )
+    .startOf("day")
+    .valueOf();
+
+  const endDate = moment(
+    searchParams.get("end_date"),
+    "YYYY-MM-DD"
+  )
+    .set({ hour: 23, minute: 59, second: 0, millisecond: 0 })
+    .valueOf();
   const [data, setData] = useState<Activity[]>([]);
 
   const handleLoad = async () => {
@@ -18,7 +31,7 @@ export default function ActivityTable() {
     try {
       const resp = await get_data(
         token,
-        `/activities?group=${group == "0" ? "" : group}`
+        `/activities?group=${group == "0" ? "" : group}${startDate ? '&start_date=' + startDate : ''}${endDate ? '&end_date=' + endDate : ''}`
       );
       setData(resp.data);
     } catch (error: any) {
@@ -41,7 +54,10 @@ export default function ActivityTable() {
             Kelompok Kerja
           </th>
           <th className="border px-2 py-1 font-medium text-black">
-            Tanggal Kegiatan
+            Tanggal Mulai Kegiatan
+          </th>
+          <th className="border px-2 py-1 font-medium text-black">
+            Tanggal Selesai Kegiatan
           </th>
           <th className="border px-2 py-1 font-medium text-black">
             Anggota Hadir
@@ -66,7 +82,12 @@ export default function ActivityTable() {
               </td>
               <td className="border px-2 py-1">
                 <p className="text-black">
-                  {moment.unix(item.date / 1000).format("DD-MM-YYYY")}
+                  {moment.unix(item.start_time / 1000).format("DD-MM-YYYY")}
+                </p>
+              </td>
+              <td className="border px-2 py-1">
+                <p className="text-black">
+                  {moment.unix(item.end_time / 1000).format("DD-MM-YYYY")}
                 </p>
               </td>
               <td className="border px-2 py-1">
