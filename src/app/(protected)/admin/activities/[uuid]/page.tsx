@@ -137,7 +137,9 @@ export default function page({ params }: { params: { uuid: string } }) {
     try {
       setIsLoading(true);
       const resp = await get_data(token, config.default_api);
-      setValues(resp.data);
+      const startTime = new Date(resp.data.start_time).toISOString().slice(0, 16);
+      const endTime = new Date(resp.data.end_time).toISOString().slice(0, 16);
+      setValues({ ...resp.data, start_time: startTime, end_time: endTime });
       const resp2 = await get_data(
         token,
         `/members/not/activities/${params.uuid}`
@@ -172,7 +174,7 @@ export default function page({ params }: { params: { uuid: string } }) {
     formData.append("group", values.group);
     formData.append("description", values.description);
     formData.append("location", values.location);
-    
+
     const startTime = moment(values.start_time, "YYYY-MM-DD HH:mm").valueOf();
     formData.append("start_time", startTime.toString());
 
